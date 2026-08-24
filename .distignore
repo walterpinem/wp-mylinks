@@ -1,0 +1,18 @@
+# Development notes. Matched by pattern, not by name: listing files individually
+# means every new note ships to customers until someone remembers to add it.
+# README.txt is the WordPress-facing file and is not affected by this.
+*.md
+*.log
+
+# Development tree and tooling.
+_dev/
+.git/
+.claude/
+node_modules/
+.distignore
+
+# Signet writes signet-provenance.php into archives as it serves them; a local
+# build must never carry one of its own, or a stale reference would ship to
+# everyone and every copy would claim the same origin. (Applies to the future
+# Pro plugin; harmless to exclude here already.)
+signet-provenance.php

@@ -1,0 +1,1197 @@
+/**
+ * WP MyLinks — Public Styles
+ *
+ * Frontend styles for the standalone MyLink landing-page template.
+ * Indentation: tabs, per WordPress CSS Coding Standards.
+ *
+ * @package Wp_Mylinks
+ * @since   1.0.0
+ */
+
+/* -----------------------------------------------------------------------------
+ * 1. Base
+ * -------------------------------------------------------------------------- */
+
+html {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+	font-size: 112.5%;
+	line-height: 1.67;
+	color: #232323;
+}
+
+body,
+html {
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+}
+
+/* Fill at least the viewport and never tile the theme background. Themes set
+ * their gradient/color with the `background` shorthand on the theme class
+ * (e.g. .prau), which resets repeat/size to their defaults; a short page then
+ * leaves the body smaller than the canvas and the gradient tiles, showing a
+ * seam. The higher-specificity `body.mylinks-body` selector wins over that
+ * shorthand, so this applies to every theme. `min-height` is also safe from
+ * the shorthand. dvh refines the vh fallback where supported (mobile chrome).
+ *
+ * The flex column plus a growing main (below) keeps the footer at the bottom
+ * of the viewport when a page has few links, instead of stranding it mid-page
+ * over the tall background. Tall pages have no free space to distribute, so
+ * the footer keeps its usual spacing after the content. */
+body.mylinks-body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	min-height: 100dvh;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.mylinks-body .mylinks {
+	flex: 1 0 auto;
+}
+
+a {
+	text-decoration: none;
+}
+
+/* -----------------------------------------------------------------------------
+ * 2. Layout
+ * -------------------------------------------------------------------------- */
+
+.mylinks-footer {
+	margin: 100px auto 10px;
+}
+
+.mylinks-body .mylinks,
+.mylinks-body .wp-mylinks-credits {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 500px;
+	width: 100%;
+	padding: 0;
+}
+
+.mylinks-body .wp-mylinks-credits,
+.mylinks-body .wp-mylinks-credits a {
+	margin: 100px auto 10px;
+	font-size: 14px;
+	color: #000032;
+	text-align: center;
+}
+
+/* -----------------------------------------------------------------------------
+ * 3. Profile (avatar, name, description)
+ * -------------------------------------------------------------------------- */
+
+.mylinks-body .name h1 {
+	font-weight: 700;
+	font-size: 115%;
+}
+
+.mylinks-body .avatar,
+.mylinks-body .description,
+.mylinks-body .name h1 {
+	margin-bottom: 1.4rem;
+	text-align: center;
+}
+
+.mylinks .avatar {
+	position: relative;
+	width: 150px;
+	height: 150px;
+	margin: 30px auto 20px;
+	padding: 5px;
+	border-radius: 50%;
+}
+
+.mylinks-body .avatar img {
+	position: absolute;
+	top: -25px;
+	left: 5px;
+	display: block;
+	margin: 30px auto;
+	padding: 5px;
+	background: #fff;
+	border-radius: 50%;
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+
+	.mylinks .avatar {
+		width: 130px;
+		height: 130px;
+	}
+
+	.mylinks-body .avatar img {
+		width: 120px;
+		height: 120px;
+	}
+}
+
+@media (min-width: 320px) and (max-width: 480px) {
+
+	.mylinks .avatar {
+		width: 100px;
+		height: 100px;
+	}
+
+	.mylinks-body .avatar img {
+		width: 90px;
+		height: 90px;
+	}
+}
+
+/* -----------------------------------------------------------------------------
+ * 4. Link buttons
+ * -------------------------------------------------------------------------- */
+
+.mylinks-body .button {
+	position: relative;
+	display: block;
+	margin-bottom: 1rem;
+	padding: 1rem 0.33rem;
+	border: 2px solid #273d3b;
+	border-radius: 4px;
+	transition: background-color 0.38s ease, color 0.38s ease;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.mylinks-body .button:hover {
+	box-shadow:
+		0 5px 5px -3px rgb(0 0 0 / 0.2),
+		0 8px 10px 1px rgb(0 0 0 / 0.14),
+		0 3px 14px 2px rgb(0 0 0 / 0.12);
+}
+
+.mylinks-body .hidden-wrap,
+.mylinks-body .thumbnail-wrap {
+	position: absolute;
+	top: 50%;
+	z-index: 1;
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 2px 0;
+	vertical-align: middle;
+	transform: translateY(-50%);
+}
+
+.mylinks-body .link-text {
+	display: block;
+	margin-left: 80px;
+	margin-right: 15px;
+	line-height: 20px;
+	font-weight: 500;
+	text-align: left;
+	text-indent: 0;
+	white-space: normal;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-word;
+	hyphens: auto;
+}
+
+.mylinks-body img.link-image {
+	float: left;
+	width: 50px;
+	height: 50px;
+	max-width: 50px;
+	object-fit: cover;
+	border-radius: 4px;
+	pointer-events: none;
+}
+
+/* -----------------------------------------------------------------------------
+ * 5. Social icons
+ * -------------------------------------------------------------------------- */
+
+.mylinks-body .user-profile-link,
+.mylinks-body .user-profile__social-icon {
+	width: 60px;
+	max-width: 50px;
+	padding: 5px;
+	cursor: pointer;
+	transition: transform cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.mylinks-body .user-profile {
+	position: relative;
+	left: 0;
+	display: block;
+	width: 100%;
+	margin: 30px auto 20px;
+	padding-bottom: 12px;
+	text-align: center;
+}
+
+.mylinks-body .button,
+.mylinks-body .description {
+	margin-left: 25px;
+	margin-right: 25px;
+}
+
+.media-embed iframe {
+	width: 100%;
+	max-width: 100%;
+}
+
+/* Pinterest's oEmbed iframe is fixed-size (450x774), sized by Pinterest for
+ * its own content at exactly 450px wide. Stretching it to the column distorts
+ * the card, but `width: auto` collapses an iframe to the 300px replaced-element
+ * default, which is worse. Pin it to its designed 450px width, centered, and
+ * cap it to the column so it still shrinks on narrow screens. */
+.mylinks-body .media-embed iframe[src*="pinterest."] {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 450px;
+	max-width: 100%;
+}
+
+/* -----------------------------------------------------------------------------
+ * 5b. Section headings, search bar, HTML blocks (1.1.0)
+ *
+ * Theme-agnostic: colors inherit from the active theme's body text so these
+ * read on light and dark themes alike, and no theme rule targets these
+ * classes, so existing themes are untouched.
+ * -------------------------------------------------------------------------- */
+
+.mylinks-body .link-heading {
+	margin: 22px 25px 6px;
+	text-align: center;
+}
+
+.mylinks-body .link-heading:first-child {
+	margin-top: 0;
+}
+
+.mylinks-body .mylinks-section-heading {
+	color: inherit;
+	font-size: 0.95rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	margin: 0;
+	opacity: 0.85;
+	text-transform: uppercase;
+}
+
+.mylinks-body .mylinks-html-block {
+	margin: 12px 25px;
+	overflow-wrap: anywhere;
+}
+
+.mylinks-body .mylinks-search {
+	margin: 0 25px 16px;
+}
+
+.mylinks-body .mylinks-search__input {
+	background: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.18);
+	border-radius: 999px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+	box-sizing: border-box;
+	color: #1a1a1a;
+	display: block;
+	font: inherit;
+	padding: 11px 18px;
+	width: 100%;
+}
+
+.mylinks-body .mylinks-search__input:focus {
+	border-color: rgba(0, 0, 0, 0.4);
+	outline: 2px solid rgba(0, 0, 0, 0.15);
+	outline-offset: 1px;
+}
+
+.mylinks-body .mylinks-search__empty {
+	color: inherit;
+	font-size: 0.9rem;
+	margin: 10px 0 0;
+	opacity: 0.8;
+	text-align: center;
+}
+
+.mylinks-body .mylinks-social-icon-font {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 26px;
+	line-height: 1;
+	color: inherit;
+}
+
+/*
+ * Per-theme text color for the new elements: they mirror each theme's own
+ * content (description/name) color so they read on dark themes too. Themes
+ * with no explicit color use the default dark text, which suits their light
+ * backgrounds, so only the dark themes need an override here.
+ */
+.merbabu .mylinks-section-heading,
+.merbabu .mylinks-html-block,
+.merbabu .mylinks-search__empty,
+.merbabu .mylinks-social-icon-font,
+.cikuray .mylinks-section-heading,
+.cikuray .mylinks-html-block,
+.cikuray .mylinks-search__empty,
+.cikuray .mylinks-social-icon-font,
+.ciremai .mylinks-section-heading,
+.ciremai .mylinks-html-block,
+.ciremai .mylinks-search__empty,
+.ciremai .mylinks-social-icon-font,
+.slamet .mylinks-section-heading,
+.slamet .mylinks-html-block,
+.slamet .mylinks-search__empty,
+.slamet .mylinks-social-icon-font,
+.papandayan .mylinks-section-heading,
+.papandayan .mylinks-html-block,
+.papandayan .mylinks-search__empty,
+.papandayan .mylinks-social-icon-font,
+.sindoro .mylinks-section-heading,
+.sindoro .mylinks-html-block,
+.sindoro .mylinks-search__empty,
+.sindoro .mylinks-social-icon-font,
+.krakatau .mylinks-section-heading,
+.krakatau .mylinks-html-block,
+.krakatau .mylinks-search__empty,
+.krakatau .mylinks-social-icon-font,
+.bromo .mylinks-section-heading,
+.bromo .mylinks-html-block,
+.bromo .mylinks-search__empty,
+.bromo .mylinks-social-icon-font,
+.prau .mylinks-section-heading,
+.prau .mylinks-html-block,
+.prau .mylinks-search__empty,
+.prau .mylinks-social-icon-font,
+.kopi-hitam .mylinks-section-heading,
+.kopi-hitam .mylinks-html-block,
+.kopi-hitam .mylinks-search__empty,
+.kopi-hitam .mylinks-social-icon-font {
+	color: #fff;
+}
+
+.kopi-susu .mylinks-section-heading,
+.kopi-susu .mylinks-html-block,
+.kopi-susu .mylinks-search__empty,
+.kopi-susu .mylinks-social-icon-font {
+	color: #000032;
+}
+
+/* -----------------------------------------------------------------------------
+ * 6. Animations (defined once, used by multiple themes)
+ * -------------------------------------------------------------------------- */
+
+@keyframes slidebg {
+
+	to {
+		background-position: 80vw;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+/* -----------------------------------------------------------------------------
+ * 7. Theme: Default
+ * -------------------------------------------------------------------------- */
+
+.default .button {
+	color: #f5f5f5;
+	background-color: #273d3b;
+	border: 2px solid #273d3b;
+}
+
+.default .button:hover {
+	color: #273d3b;
+	background-color: transparent;
+}
+
+.default .mylink-card,
+.default .youtube-player,
+.default .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 4px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 8. Theme: Papandayan
+ * -------------------------------------------------------------------------- */
+
+.papandayan {
+	background: linear-gradient(0deg, #d463a3, #fd8f67) !important;
+}
+
+.papandayan .description,
+.papandayan .name,
+.papandayan .wp-mylinks-credits,
+.papandayan .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.papandayan img.mylinks-social-icons {
+	box-shadow: 0 20px 25px 0 rgb(0 0 0 / 0.15);
+}
+
+.papandayan .button {
+	color: #273d3b;
+	background-color: #fff;
+	border: 2px solid #fff;
+}
+
+.papandayan .button:hover {
+	color: #fff;
+	background-color: transparent;
+	border: 2px solid #fff;
+}
+
+.papandayan .mylink-card,
+.papandayan .youtube-player,
+.papandayan .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 4px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 9. Theme: Prau
+ * -------------------------------------------------------------------------- */
+
+.prau {
+	background: linear-gradient(0deg, #1f1858 0, #fd1d1d 50%, #fcb045 100%);
+}
+
+.prau .description,
+.prau .name,
+.prau .wp-mylinks-credits,
+.prau .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.prau .mylinks,
+.prau .wp-mylinks-credits {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 500px;
+	width: 100%;
+}
+
+.prau .avatar,
+.prau .description {
+	margin-bottom: 1.4rem;
+	text-align: center;
+}
+
+.prau img.mylinks-social-icons {
+	box-shadow: 0 20px 25px 0 rgb(0 0 0 / 0.15);
+}
+
+.prau .button {
+	margin-bottom: 0.66rem;
+	color: #273d3b;
+	background-color: #fff;
+	border: 2px solid #fff;
+	border-radius: 2px;
+}
+
+.prau .button:hover {
+	color: #fff;
+	background: linear-gradient(to right, #b31217, #e52d27);
+	border: 2px solid #fff;
+	animation: slidebg 5s linear infinite;
+}
+
+.prau img.link-image {
+	border-radius: 2px;
+}
+
+.prau .mylink-card,
+.prau .youtube-player,
+.prau .media-embed iframe {
+	margin-bottom: 0.66rem;
+	border-radius: 2px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 10. Theme: Merbabu
+ * -------------------------------------------------------------------------- */
+
+.merbabu {
+	background: linear-gradient(0deg, #22c1c3 0, #fdbb2d 100%);
+}
+
+.merbabu .description,
+.merbabu .name,
+.merbabu .wp-mylinks-credits,
+.merbabu .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.merbabu img.mylinks-social-icons {
+	box-shadow: 0 20px 25px 0 rgb(0 0 0 / 0.15);
+}
+
+.merbabu .button {
+	margin-bottom: 0.66rem;
+	padding: 1rem 0.33rem;
+	color: #273d3b;
+	background-color: #fff;
+	border: 2px solid #fff;
+	border-radius: 2px;
+}
+
+.merbabu .button:hover {
+	color: #fff;
+	background-color: transparent;
+}
+
+.merbabu img.link-image {
+	border-radius: 2px;
+}
+
+.merbabu .mylink-card,
+.merbabu .youtube-player,
+.merbabu .media-embed iframe {
+	margin-bottom: 0.66rem;
+	border-radius: 4px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 11. Theme: Sindoro
+ * -------------------------------------------------------------------------- */
+
+.sindoro {
+	background: linear-gradient(to bottom, #3a6073, #16222a);
+}
+
+.sindoro .description,
+.sindoro .name,
+.sindoro .wp-mylinks-credits,
+.sindoro .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.sindoro img.mylinks-social-icons {
+	box-shadow: 0 20px 25px 0 rgb(0 0 0 / 0.15);
+}
+
+.sindoro .button {
+	margin-bottom: 0.66rem;
+	padding: 1rem 0.33rem;
+	color: #273d3b;
+	background-color: #fff;
+	border: 2px solid #fff;
+	border-radius: 2px;
+}
+
+.sindoro .button:hover {
+	color: #fff;
+	background-color: transparent;
+}
+
+.sindoro .mylink-card,
+.sindoro .youtube-player,
+.sindoro .media-embed iframe {
+	margin-bottom: 0.66rem;
+	border-radius: 4px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 12. Theme: Cikuray
+ * -------------------------------------------------------------------------- */
+
+.cikuray {
+	background-image: linear-gradient(to bottom, #00002c, #010734, #000e3c, #001344, #00164c);
+}
+
+.cikuray .description,
+.cikuray .name,
+.cikuray .wp-mylinks-credits,
+.cikuray .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.cikuray .button {
+	margin-bottom: 0.66rem;
+	padding: 1rem 0.33rem;
+	color: #fff;
+	background-color: #000032;
+	border: 2px solid #fff;
+	border-radius: 40px;
+}
+
+.cikuray img.link-image {
+	border-radius: 40px;
+}
+
+.cikuray .button:hover {
+	color: #000032;
+	background-color: #fff;
+}
+
+.cikuray .mylink-card,
+.cikuray .youtube-player,
+.cikuray .media-embed iframe {
+	margin-bottom: 0.66rem;
+	background: transparent;
+	border: 2px solid #fff;
+	border-radius: 30px;
+}
+
+/* -----------------------------------------------------------------------------
+ * 13. Theme: Ciremai
+ * -------------------------------------------------------------------------- */
+
+.ciremai {
+	background-image: linear-gradient(
+		to top,
+		#1d686e, #366c6c, #48706b, #58746d, #667770, #6b7a74,
+		#6f7e79, #74817d, #728582, #6f8989, #6d8d90, #6b9099
+	);
+}
+
+.ciremai .description,
+.ciremai .name,
+.ciremai .wp-mylinks-credits,
+.ciremai .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.ciremai .button {
+	margin-bottom: 0.66rem;
+	padding: 1rem 0.33rem;
+	color: #273d3b;
+	background-color: #fff;
+	border: 2px solid #fff;
+	border-radius: 2px;
+}
+
+.ciremai .button:hover {
+	color: #fff;
+	background-color: #000032;
+	border: 2px solid #fff;
+}
+
+.ciremai .mylink-card,
+.ciremai .youtube-player,
+.ciremai .media-embed iframe {
+	margin-bottom: 0.66rem;
+	background: transparent;
+	border: 2px solid #fff;
+	border-radius: 4px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 14. Theme: Bromo
+ * -------------------------------------------------------------------------- */
+
+.bromo {
+	background-color: #6284ff;
+	background-image: linear-gradient(180deg, #6284ff 5%, #f00 89%);
+}
+
+.bromo .description,
+.bromo .name,
+.bromo .wp-mylinks-credits,
+.bromo .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.bromo img.link-image {
+	border-radius: 40px;
+}
+
+.bromo .button {
+	margin-bottom: 0.66rem;
+	padding: 1rem 0.33rem;
+	color: #273d3b;
+	background-color: #fff;
+	border: 2px solid #fff;
+	border-radius: 40px;
+}
+
+.bromo .button:hover {
+	color: #fff;
+	background: linear-gradient(to left, #f00, #6284ff);
+	border: 2px solid #f00;
+	animation: slidebg 5s linear infinite;
+}
+
+.bromo .mylink-card,
+.bromo .youtube-player,
+.bromo .media-embed iframe {
+	margin-bottom: 0.66rem;
+	border-radius: 30px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 15. Theme: Slamet
+ * -------------------------------------------------------------------------- */
+
+.slamet {
+	background: linear-gradient(to top, #457fca, #5691c8);
+}
+
+.slamet .description,
+.slamet .name,
+.slamet .wp-mylinks-credits,
+.slamet .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.slamet .mylinks,
+.slamet .wp-mylinks-credits {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 500px;
+	width: 100%;
+}
+
+.slamet .avatar,
+.slamet .description {
+	margin-bottom: 1.4rem;
+	text-align: center;
+}
+
+.slamet .button {
+	color: #fff;
+	background: #084177;
+	border: 2px solid #fff;
+	border-radius: 4px;
+}
+
+.slamet .button:hover {
+	color: #273d3b;
+	background-color: #fff;
+	border: 2px solid #fff;
+}
+
+.slamet img.link-image {
+	border-radius: 4px;
+}
+
+.slamet .mylink-card,
+.slamet .youtube-player,
+.slamet .media-embed iframe {
+	margin-bottom: 1rem;
+	border: 2px solid #fff;
+	border-radius: 4px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 16. Theme: Krakatau
+ * -------------------------------------------------------------------------- */
+
+.krakatau {
+	background-color: #000032;
+}
+
+.krakatau .description,
+.krakatau .name,
+.krakatau .wp-mylinks-credits,
+.krakatau .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.krakatau img.link-image {
+	border-radius: 40px !important;
+}
+
+.krakatau .button {
+	display: block;
+	color: #fff;
+	background-color: #1c1c5e;
+	border: 2px solid #1c1c5e;
+	border-radius: 40px !important;
+}
+
+.krakatau .button:hover {
+	background: linear-gradient(to left, #23074d, #cc5333);
+	border: 2px solid #23074d;
+	animation: slidebg 5s linear infinite;
+}
+
+.krakatau .mylink-card,
+.krakatau .youtube-player,
+.krakatau .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 30px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 17. Theme: Kopi Hitam
+ * -------------------------------------------------------------------------- */
+
+.kopi-hitam {
+	background-color: #212121;
+}
+
+.kopi-hitam .description,
+.kopi-hitam .name,
+.kopi-hitam .wp-mylinks-credits,
+.kopi-hitam .wp-mylinks-credits a {
+	color: #fff;
+}
+
+.kopi-hitam .button {
+	color: #fff;
+	background-color: #3b2f2f;
+	border: 2px solid #3b2f2f;
+	border-radius: 40px;
+}
+
+.kopi-hitam .button:hover {
+	color: #fff;
+	background-color: transparent;
+	border: 2px solid #212121;
+}
+
+.kopi-hitam img.link-image {
+	border-radius: 40px;
+}
+
+.kopi-hitam .mylink-card,
+.kopi-hitam .youtube-player,
+.kopi-hitam .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 30px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 18. Theme: Kopi Susu
+ * -------------------------------------------------------------------------- */
+
+.kopi-susu {
+	background-color: #ecdcc2;
+}
+
+.kopi-susu .description,
+.kopi-susu .name,
+.kopi-susu .wp-mylinks-credits,
+.kopi-susu .wp-mylinks-credits a {
+	color: #000032;
+}
+
+.kopi-susu img.link-image {
+	border-radius: 40px;
+}
+
+.kopi-susu .button {
+	color: #fff;
+	background-color: #6f4e37;
+	border: 2px solid #6f4e37;
+	border-radius: 40px;
+}
+
+.kopi-susu .button:hover {
+	color: #6f4e37;
+	background-color: transparent;
+}
+
+.kopi-susu .mylink-card,
+.kopi-susu .youtube-player,
+.kopi-susu .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 30px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 19. Theme: Polos
+ * -------------------------------------------------------------------------- */
+
+.polos {
+	background-color: #fff;
+}
+
+.polos img.link-image {
+	border-radius: 40px;
+}
+
+.polos .button {
+	color: #000032;
+	background: #fff;
+	border: 2px solid #f5f5f5;
+	border-radius: 40px;
+	box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.3);
+}
+
+.polos .button:hover {
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+.polos .mylink-card,
+.polos .youtube-player,
+.polos .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 30px;
+	box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.3);
+}
+
+/* -----------------------------------------------------------------------------
+ * 20. Theme: Datar
+ * -------------------------------------------------------------------------- */
+
+.datar {
+	background-color: #fff;
+}
+
+.datar .button {
+	color: #000032;
+	background: #fff;
+	border: 2px solid #f9f9f9;
+	border-radius: 0;
+	box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.3);
+}
+
+.datar .button:hover,
+.datar .mylink-card:hover,
+.datar .youtube-player:hover,
+.datar .media-embed iframe:hover {
+	border-radius: 2px;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+.datar .mylink-card,
+.datar .youtube-player,
+.datar .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 0;
+	box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.3);
+}
+
+/* -----------------------------------------------------------------------------
+ * 21. Theme: Pastel
+ * -------------------------------------------------------------------------- */
+
+.pastel {
+	background-color: #fde7f0;
+}
+
+.pastel img.link-image {
+	border-radius: 2px;
+}
+
+.pastel .button {
+	color: #fff;
+	background: #d291bc;
+	border: 2px solid #d291bc;
+	border-radius: 2px;
+	box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.3);
+}
+
+.pastel .button:hover {
+	background: #957dad;
+	border: 2px solid #957dad;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+.pastel .mylink-card,
+.pastel .youtube-player,
+.pastel .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 2px;
+	box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.3);
+}
+
+.pastel .mylink-card:hover,
+.pastel .youtube-player:hover,
+.pastel .media-embed iframe:hover {
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 22. Theme: Klepon Viral
+ * -------------------------------------------------------------------------- */
+
+.klepon {
+	background-color: #fff;
+}
+
+.klepon img.link-image {
+	border-radius: 40px;
+}
+
+.klepon .button {
+	color: #fff;
+	background: #64e291;
+	border: 2px solid #64e291;
+	border-radius: 40px;
+	box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.3);
+}
+
+.klepon .button:hover {
+	background: #c17a48;
+	border: 2px solid #c17a48;
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+.klepon .mylink-card,
+.klepon .youtube-player,
+.klepon .media-embed iframe {
+	margin-bottom: 1rem;
+	border-radius: 30px;
+	box-shadow: 0 5px 5px -3px rgb(0 0 0 / 0.3);
+}
+
+.klepon .mylink-card:hover,
+.klepon .youtube-player:hover,
+.klepon .media-embed iframe:hover {
+	box-shadow: 0 8px 5px -5px rgb(0 0 0 / 0.4);
+}
+
+/* -----------------------------------------------------------------------------
+ * 23. Card layout
+ * -------------------------------------------------------------------------- */
+
+.card-wrapper {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	max-width: 1200px;
+	margin-left: 25px;
+	margin-right: 25px;
+}
+
+.mylink-card {
+	position: relative;
+	flex: 1;
+	height: 0;
+	margin: 0;
+	padding-bottom: 56.25%;
+	overflow: hidden;
+	background-image: linear-gradient(180deg, rgb(0 0 0 / 0) 40%, rgb(0 0 0 / 0.75));
+	border: 0 solid #0ff;
+	transform: translate3d(0, 0, 0);
+	backface-visibility: hidden;
+}
+
+@media (min-width: 900px) {
+
+	.mylink-card {
+		height: 0;
+	}
+}
+
+.mylink-card::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	width: 100%;
+	height: 100%;
+	background: rgb(0 0 0 / 0) linear-gradient(to bottom, rgb(0 0 0 / 0) 50%, rgb(0 0 0 / 0.7) 80%);
+}
+
+.mylink-card-link {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+}
+
+.mylink-card-background {
+	position: relative;
+	z-index: -1;
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 3s ease;
+	backface-visibility: hidden;
+}
+
+.mylink-card-title-wrapper {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 1rem;
+	color: #fff;
+	background-image: linear-gradient(180deg, rgb(0 0 0 / 0) 40%, rgb(0 0 0 / 0.75));
+	transition: background-color 1.5s ease;
+}
+
+.mylink-card-title {
+	margin-bottom: 0.5rem;
+	transition: color 1s ease;
+}
+
+h2.mylink-card-title {
+	text-align: center;
+}
+
+@media (min-width: 900px) {
+
+	.mylink-card:hover .mylink-card-title-wrapper {
+		background-color: rgb(0 0 0 / 0.6);
+	}
+
+	.mylink-card:hover .mylink-card-title {
+		color: #fff;
+	}
+
+	.mylink-card:hover .mylink-card-background {
+		z-index: -1;
+		transform: scale(1.2);
+	}
+}
+
+
+/* -----------------------------------------------------------------------------
+ * Accessibility helpers (1.0.8)
+ * -------------------------------------------------------------------------- */
+
+/* Visually hidden, but available to screen readers. WCAG 2.2 compliant. */
+.screen-reader-text {
+	position: absolute !important;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	border: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	word-wrap: normal !important;
+}
+
+/* Make the skip link visible when focused, anchored to the top of the page. */
+.screen-reader-text:focus {
+	position: fixed !important;
+	top: 8px;
+	left: 8px;
+	z-index: 100000;
+	clip: auto !important;
+	clip-path: none;
+	width: auto;
+	height: auto;
+	margin: 0;
+	padding: 12px 18px;
+	background: #fff;
+	color: #000032;
+	border: 2px solid #000032;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	white-space: normal;
+}
+
+/* When skipped to, the main element gets focus — suppress its outline since
+   the skip link already gave the user the visual cue. */
+.mylinks[tabindex="-1"]:focus {
+	outline: none;
+}

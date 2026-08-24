@@ -1,0 +1,76 @@
+/**
+ * WP MyLinks — legacy admin styles.
+ *
+ * Slimmed to the survivors in 1.1.0: everything the settings page needed now
+ * lives in wml-tokens.css / wml-components.css. What remains styles screens
+ * and elements outside the reshaped settings page.
+ *
+ * @package Wp_Mylinks
+ */
+
+/* Donate button (Buy Me a Coffee — platform colors, deliberately off-palette) */
+.donate-container {
+    margin: 24px auto;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    display: block;
+}
+.donatebutton {
+    backface-visibility: hidden;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    white-space: nowrap;
+    background: #ff813f;
+    border-radius: 5px;
+    border: 0 solid #ff813f;
+    border-width: 0 0 5px 0;
+    padding: 9px 15px 6px 15px;
+    box-shadow: inset 0 1px 3px rgb(255 255 255 / 0.4);
+    color: #fff;
+    font-size: initial;
+    font-family: inherit;
+    font-weight: 900;
+    font-style: normal;
+}
+.donatebutton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px -5px rgb(45 62 79 / 0.3) !important;
+    transition: all ease-in-out 0.3s;
+}
+
+/* Click-to-select URL column on the MyLink list table */
+input[type="text"].mylink-copy {
+    background: 0 0 !important;
+    font-size: 12px !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 4px 8px !important;
+    margin: 0 !important;
+    width: 100%;
+}
+
+/* The manual-URL input inside Links rows spans the row */
+input.mylinks-selected-url {
+    width: 100%;
+}
+
+/* Collection submenu icon */
+#menu-posts-mylink ul.wp-submenu a[href="edit.php?post_type=mylinks-collection"]::before {
+    content: "\f233";
+    font-family: "dashicons";
+    margin-right: 5px;
+    float: left;
+    width: 15px;
+    color: #f0f0f1;
+}
+
+/* Footer credits on WP MyLinks admin screens (shared OSKIT classes) */
+.oskit-footer-thankyou a {
+    text-decoration: none;
+    color: #8a6506; /* measured 5.32:1 on white; --wml-brand-deep was 3.77 */
+}
+.oskit-footer-thankyou a:hover {
+    color: #a97c07;
+}

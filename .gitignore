@@ -1,0 +1,8 @@
+# Dev tooling stays out of this PUBLIC repo. The full _dev tree (roadmaps,
+# audits, artwork, builds, tests, notes) is mirrored into the private
+# wp-mylinks-pro repo at _dev/free/ via its _dev/sync-free-dev.ps1.
+_dev/
+
+node_modules/
+*.zip
+.phpcs.cache
