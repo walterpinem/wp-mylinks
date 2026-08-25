@@ -65,8 +65,11 @@ Put your MyLink URL in every bio and profile, and drive all of that traffic to a
 *   **Link scheduling & targeting**: show a link from/until a date, by device, by country, or to logged-in/logged-out visitors only.
 *   **A/B testing**: rotate link variants and see impressions, clicks, and click-through rate per test.
 *   **UTM tagging & link cloaking**: automatic campaign parameters and pretty `/go/` redirect links with server-side click counting.
-*   **Instagram-style layouts & email capture**: a link grid, story highlights, countdown timers, FAQ rows, and a signup form with Mailchimp, Kit, MailerLite, and ActiveCampaign sync.
-*   **Theme Builder, branded QR codes & Live Builder**: design every element of your page, export print-ready QR codes with your logo, and edit visually with a true live preview.
+*   **Instagram-style layouts**: turn your links into a photo grid with square, portrait, or tall tiles, and add a story-highlights strip above them.
+*   **Content elements & email capture**: countdown timers, FAQ rows, dividers, text blocks, and a signup form with Mailchimp, Kit, MailerLite, and ActiveCampaign sync.
+*   **Theme Builder**: edit any of the 16 themes or build your own, with gradients, background images, per-element typography, button hover states, avatar, cards, social icons, and search bar controls.
+*   **Branded QR codes**: your logo in the center, custom colors, dot and rounded styles, and high-resolution PNG plus print-ready vector SVG downloads.
+*   **Live Builder**: drag-and-drop visual editing with a true live preview of your actual page, theme and all.
 
 [**Learn more about WP MyLinks Pro →**](https://www.onlinestorekit.com/wp-mylinks/ "WP MyLinks Pro")
 
