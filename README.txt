@@ -59,7 +59,7 @@ Put your MyLink URL in every bio and profile, and drive all of that traffic to a
 
 ### Go further with WP MyLinks Pro
 
-[**WP MyLinks Pro**](https://www.onlinestorekit.com/wp-mylinks/ "WP MyLinks Pro") is an optional paid add-on that installs beside the free plugin and extends it through its public hooks. Your pages, links, and themes keep working exactly as before, and nothing free ever moves behind the paywall. Pro adds:
+[**WP MyLinks Pro**](https://www.onlinestorekit.com/kit/wp-mylinks-pro/ "WP MyLinks Pro") is an optional paid add-on that installs beside the free plugin and extends it through its public hooks. Your pages, links, and themes keep working exactly as before, and nothing free ever moves behind the paywall. Pro adds:
 
 *   **Analytics dashboard**: charts, countries, devices, referrers, campaigns, and CSV export, all stored in your own database with no IP addresses collected.
 *   **Link scheduling & targeting**: show a link from/until a date, by device, by country, or to logged-in/logged-out visitors only.
