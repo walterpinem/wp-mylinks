@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/WalterPinem
 Tags: linktree, link in bio, landing page, social profile, schema
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -175,6 +175,17 @@ WP MyLinks bundles these open-source libraries, served locally from your own sit
 
 == Changelog ==
 The complete, formatted version history is also published at [onlinestorekit.com/changelog/wp-mylinks](https://www.onlinestorekit.com/changelog/wp-mylinks/ "WP MyLinks Changelog").
+
+= 1.1.1 - August 25, 2026 =
+
+Maintenance release: WordPress 7.1 compatibility and housekeeping.
+
+* [New] **Third-party libraries** section in this readme crediting the bundled open-source libraries (QR Code Generator for JavaScript, Select2, Simple Icons), and the bundled Select2 stylesheet regained its MIT license banner.
+* [Improved] The MyLinks admin menu now shows the plugin's own brand icon instead of a generic Dashicon.
+* [Improved] More Plugins tab refreshed: External Marketplace Buttons added, PixMapr and PixSwipr now link to their released product pages, and placeholder links for unreleased plugins were removed so no card can lead to a missing page.
+* [Improved] The two buttons on each More Plugins card no longer animate on hover; their hover colors are unchanged.
+* [Fixed] The "Export This Page" button in the Import/Export metabox rendered wider than its container and off-center.
+* [Misc] Tested up to WordPress 7.1.
 
 = 1.1.0 - August 19, 2026 =
 
@@ -358,6 +369,9 @@ The complete, formatted version history is also published at [onlinestorekit.com
 * Initial release: Hello World!
 
 == Upgrade Notice ==
+= 1.1.1 - August 25, 2026 =
+Maintenance release: WordPress 7.1 compatibility, a refreshed More Plugins tab, the plugin's own brand menu icon, bundled-library credits, and a small Export button fix. Safe update for all users.
+
 = 1.1.0 - August 19, 2026 =
 Major release. New from your requests: section headings, a search/filter bar, HTML blocks, custom fonts, icon-font classes for social links, and a Google Tag Manager dataLayer event. Plus a per-link click counter, QR codes, accent colors, crisp SVG social icons, a full admin redesign, and a 4 times smaller download (the bundled CMB2 framework was replaced by the plugin's own fields system, with zero migration and byte-identical data). Recommended for all users.
 
