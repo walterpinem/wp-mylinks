@@ -24,7 +24,7 @@ Every social profile gives you a single link in the bio, and fitting more than o
 #### Stop renting your most-clicked link.
 A link-in-bio page is often the busiest URL you have, and on a hosted service that URL, its analytics, and its search value belong to the platform. 
 
-WP MyLinks builds the same page inside your WordPress site, at an address like `yoursite.com/me`, with your branding and no subscription. Every feature is free.
+WP MyLinks builds the same page inside your WordPress site, at an address like `yoursite.com/me`, with your branding and no subscription. Every feature described here is free.
 
 #### Keep 100% of your traffic.
 Put your MyLink URL in every bio and profile, and drive all of that traffic to a page on your own domain instead of a platform's. Clicks are counted in your own dashboard, and no visitor data ever leaves your site.
@@ -56,6 +56,19 @@ Put your MyLink URL in every bio and profile, and drive all of that traffic to a
 *   **Unlimited Links**: Fill your landing page(s) with links to market your contents, products, or anything you want to build your own brands.
 *   **Add Thumbnails**: Add a thumbnail to each link that best represents it.
 *   **And more awesome features to come!**
+
+### Go further with WP MyLinks Pro
+
+[**WP MyLinks Pro**](https://www.onlinestorekit.com/wp-mylinks/ "WP MyLinks Pro") is an optional paid add-on that installs beside the free plugin and extends it through its public hooks. Your pages, links, and themes keep working exactly as before, and nothing free ever moves behind the paywall. Pro adds:
+
+*   **Analytics dashboard**: charts, countries, devices, referrers, campaigns, and CSV export, all stored in your own database with no IP addresses collected.
+*   **Link scheduling & targeting**: show a link from/until a date, by device, by country, or to logged-in/logged-out visitors only.
+*   **A/B testing**: rotate link variants and see impressions, clicks, and click-through rate per test.
+*   **UTM tagging & link cloaking**: automatic campaign parameters and pretty `/go/` redirect links with server-side click counting.
+*   **Instagram-style layouts & email capture**: a link grid, story highlights, countdown timers, FAQ rows, and a signup form with Mailchimp, Kit, MailerLite, and ActiveCampaign sync.
+*   **Theme Builder, branded QR codes & Live Builder**: design every element of your page, export print-ready QR codes with your logo, and edit visually with a true live preview.
+
+[**Learn more about WP MyLinks Pro →**](https://www.onlinestorekit.com/wp-mylinks/ "WP MyLinks Pro")
 
 > For more info, please refer to [WP MyLinks Introduction](https://walterpinem.me/projects/introducing-wp-mylinks/ "WP MyLinks").
 > For Indonesian users, please refer to [WP MyLinks](https://www.seniberpikir.com/wp-mylinks/ "WP MyLinks") instead.
@@ -99,6 +112,9 @@ Premium-quality support without having to spend a dime. Just send your inquiry o
 == Frequently Asked Questions ==
 = Is it free to use? =
 Definitely free to use for unlimited sites! :)
+
+= Is there a Pro version? =
+Yes. [WP MyLinks Pro](https://www.onlinestorekit.com/wp-mylinks/ "WP MyLinks Pro") is an optional paid add-on with an analytics dashboard, link scheduling and targeting, A/B testing, UTM tagging and link cloaking, Instagram-style layouts, email capture, a Theme Builder, branded QR codes, and a drag-and-drop Live Builder. The free plugin stays fully functional without it, and nothing free ever moves behind the paywall.
 
 = How to install and use WP MyLinks? =
 4 simple steps to start:
@@ -185,6 +201,7 @@ Maintenance release: WordPress 7.1 compatibility and housekeeping.
 * [Improved] More Plugins tab refreshed: External Marketplace Buttons added, PixMapr and PixSwipr now link to their released product pages, and placeholder links for unreleased plugins were removed so no card can lead to a missing page.
 * [Improved] The two buttons on each More Plugins card no longer animate on hover; their hover colors are unchanged.
 * [Fixed] The "Export This Page" button in the Import/Export metabox rendered wider than its container and off-center.
+* [Misc] Introduced the WP MyLinks Pro section in the readme.
 * [Misc] Tested up to WordPress 7.1.
 
 = 1.1.0 - August 19, 2026 =
