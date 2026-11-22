@@ -49,6 +49,7 @@ class Wp_Mylinks_Metabox {
 	 *     @type string   $context      Metabox context. Default 'normal'.
 	 *     @type string   $priority     Metabox priority. Default 'high'.
 	 *     @type array[]  $fields       Field argument arrays (see Wp_Mylinks_Field).
+	 *     @type bool     $agent        False keeps the box out of reach of AI agents. Default true.
 	 * }
 	 * @return void
 	 */
@@ -65,6 +66,7 @@ class Wp_Mylinks_Metabox {
 				'context'      => 'normal',
 				'priority'     => 'high',
 				'fields'       => array(),
+				'agent'        => true,
 			)
 		);
 		self::hook();

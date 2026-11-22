@@ -555,6 +555,7 @@ function wp_mylinks_register_metaboxes() {
 			'object_types' => array( 'mylink' ),
 			'context'      => 'normal',
 			'priority'     => 'high',
+			'agent'        => false, // Code that runs in visitors' browsers stays out of reach of AI agents.
 			'fields'       => array(
 				array(
 					'name'            => __('Header Script', 'wp-mylinks'),

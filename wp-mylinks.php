@@ -83,6 +83,7 @@ register_deactivation_hook(__FILE__, 'wp_mylinks_deactivate');
  */
 require WP_MYLINKS_PATH . 'includes/class-wp-mylinks.php';
 require WP_MYLINKS_PATH . 'includes/fields/load.php';
+require WP_MYLINKS_PATH . 'includes/agent/load.php';
 require WP_MYLINKS_PATH . 'admin/partials/wp-mylinks-admin-settings.php';
 require WP_MYLINKS_PATH . 'includes/class-wp-mylinks-more-plugins.php';
 require WP_MYLINKS_PATH . 'includes/class-wp-mylinks-tools.php';

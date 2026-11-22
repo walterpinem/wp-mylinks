@@ -13,3 +13,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once __DIR__ . '/class-wp-mylinks-agent-access.php';
+require_once __DIR__ . '/class-wp-mylinks-agent-fields.php';
+require_once __DIR__ . '/class-wp-mylinks-agent-state.php';
