@@ -284,7 +284,11 @@
   width: 100%;
 }
 
+/* input.wml-field__input[type] (0,3,1) out-specifies core's
+   input[type="text"]:focus (0,2,1), which would paint the admin colour
+   scheme's ring instead of the house one. */
 .wml-field__input:focus,
+input.wml-field__input[type]:focus,
 .wml-field textarea:focus,
 .wml-field select:focus {
   border-color: var(--wml-brand-deep);
@@ -591,6 +595,22 @@ a.wml-button-secondary:visited {
   border-color: var(--wml-brand-strong);
   box-shadow: inset 0 2px 6px rgba(38, 46, 51, 0.05), 0 0 0 3px var(--wml-brand-ring);
   outline: none;
+}
+
+/* The SEO meta description is prose, not code: match the plain text inputs
+   above it (white surface, 2px line border, no inset). */
+[data-wml-field="mylinks_meta-description"] textarea.wml-field__input,
+.wml-field textarea#mylinks_meta_description {
+  background: var(--wml-surface);
+  border: 2px solid var(--wml-line);
+  box-shadow: none;
+  color: var(--wml-text);
+}
+
+[data-wml-field="mylinks_meta-description"] textarea.wml-field__input:focus,
+.wml-field textarea#mylinks_meta_description:focus {
+  border-color: var(--wml-brand-deep);
+  box-shadow: 0 0 0 3px var(--wml-brand-ring);
 }
 
 /* Editor code fields (per-page scripts, custom styles, Links HTML block) read

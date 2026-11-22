@@ -176,10 +176,10 @@ function wp_mylinks_register_metaboxes() {
 
 	$social_platforms = array(
 		'facebook'  => __('Facebook', 'wp-mylinks'),
-		'twitter'   => __('Twitter', 'wp-mylinks'),
+		'twitter'   => __('X (Twitter)', 'wp-mylinks'),
 		'linkedin'  => __('Linkedin', 'wp-mylinks'),
 		'instagram' => __('Instagram', 'wp-mylinks'),
-		'youtube'   => __('Youtube', 'wp-mylinks'),
+		'youtube'   => __('YouTube', 'wp-mylinks'),
 		'pinterest' => __('Pinterest', 'wp-mylinks'),
 		'tiktok'    => __('TikTok', 'wp-mylinks'),
 		'discord'   => __('Discord', 'wp-mylinks'),
@@ -400,7 +400,7 @@ function wp_mylinks_register_metaboxes() {
 						array(
 							'name'    => __('Use Card Layout for this Link?', 'wp-mylinks'),
 							'id'      => 'card-layout',
-							'desc'    => __('If <b>Yes</b> is chosen, the featured image you chose on the <b>Image</b> section above will be used as the background image of this link. <br/>Please make sure to fill all the <b>Title</b>, <b>URL</b>, <b>Image</b> fields above and <b>empty</b> the Youtube Video field below.', 'wp-mylinks'),
+							'desc'    => __('If <b>Yes</b> is chosen, the featured image you chose on the <b>Image</b> section above will be used as the background image of this link. <br/>Please make sure to fill all the <b>Title</b>, <b>URL</b>, <b>Image</b> fields above and <b>empty</b> the YouTube Video field below.', 'wp-mylinks'),
 							'type'    => 'radio',
 							'options' => array(
 								'yes' => __('Yes', 'wp-mylinks'),
@@ -409,10 +409,10 @@ function wp_mylinks_register_metaboxes() {
 							'default' => 'no',
 						),
 						array(
-							'name' => __('Youtube Video', 'wp-mylinks'),
+							'name' => __('YouTube Video', 'wp-mylinks'),
 							'id'   => 'youtube-video',
 							'type' => 'oembed',
-							'desc' => __('Enter the full Youtube video URL. <b>Please do not fill</b> the other fields, make sure to only fill the Youtube URL field.', 'wp-mylinks'),
+							'desc' => __('Enter the full YouTube video URL. <b>Please do not fill</b> the other fields, make sure to only fill the YouTube URL field.', 'wp-mylinks'),
 						),
 						array(
 							'name' => __('Media Embed', 'wp-mylinks'),
