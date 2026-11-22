@@ -472,6 +472,7 @@ final class Wp_Mylinks_Agent_Approval {
 		?>
 		<div class="notice notice-info">
 			<p><?php echo esc_html( $message ); ?></p>
+			<?php self::render_changes( Wp_Mylinks_Agent_State::read( $post ), $proposal['state'] ); ?>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION ); ?>">
 				<input type="hidden" name="post_id" value="<?php echo esc_attr( (string) $post_id ); ?>">
@@ -485,6 +486,208 @@ final class Wp_Mylinks_Agent_Approval {
 			</form>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Everything a proposal would change, field by field. The preview alone
+	 * is not enough: a row can be set to show only to some visitors, so it may
+	 * not appear for the person reviewing, and a changed URL looks the same.
+	 *
+	 * @param array $live     Live state.
+	 * @param array $proposed Proposed state.
+	 * @return array[] Items of {label, before, after}.
+	 */
+	public static function changes( array $live, array $proposed ) {
+		$out = array();
+
+		foreach ( array( 'title' => __( 'Title', 'wp-mylinks' ), 'slug' => __( 'Slug', 'wp-mylinks' ) ) as $key => $label ) {
+			if ( $live[ $key ] !== $proposed[ $key ] ) {
+				$out[] = array(
+					'label'  => $label,
+					'before' => (string) $live[ $key ],
+					'after'  => (string) $proposed[ $key ],
+				);
+			}
+		}
+
+		foreach ( Wp_Mylinks_Agent_Fields::fields() as $field ) {
+			$id     = (string) $field['id'];
+			$before = isset( $live['meta'][ $id ] ) ? $live['meta'][ $id ] : '';
+			$after  = isset( $proposed['meta'][ $id ] ) ? $proposed['meta'][ $id ] : '';
+
+			if ( $before === $after ) {
+				continue;
+			}
+
+			$label = wp_strip_all_tags( (string) ( ! empty( $field['name'] ) ? $field['name'] : $field['box_title'] ) );
+
+			if ( 'group' === $field['type'] ) {
+				$out = array_merge( $out, self::row_changes( $field, $label, $before, $after ) );
+			} else {
+				$out[] = array(
+					'label'  => $label,
+					'before' => self::show( $field, $before ),
+					'after'  => self::show( $field, $after ),
+				);
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Output the table of what a proposal would change.
+	 *
+	 * @param array $live     Live state.
+	 * @param array $proposed Proposed state.
+	 * @return void
+	 */
+	public static function render_changes( array $live, array $proposed ) {
+		$changes = self::changes( $live, $proposed );
+		if ( ! $changes ) {
+			return;
+		}
+		?>
+		<div class="wml-agent-diff">
+			<table class="widefat striped">
+				<thead>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Field', 'wp-mylinks' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Now', 'wp-mylinks' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Proposed', 'wp-mylinks' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $changes as $change ) : ?>
+						<tr>
+							<th scope="row"><?php echo esc_html( $change['label'] ); ?></th>
+							<td><?php echo esc_html( $change['before'] ); ?></td>
+							<td><?php echo esc_html( $change['after'] ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<p><?php esc_html_e( 'Check every line here, not only the preview: a link can be set to show only to some visitors, so the preview may not show it to you.', 'wp-mylinks' ); ?></p>
+		<?php
+	}
+
+	/**
+	 * What changes in a repeater. Unchanged rows are matched first, so moving a
+	 * row does not read as editing it.
+	 *
+	 * @param array  $field  Group field args.
+	 * @param string $label  Field label.
+	 * @param mixed  $before Live rows.
+	 * @param mixed  $after  Proposed rows.
+	 * @return array[]
+	 */
+	private static function row_changes( array $field, $label, $before, $after ) {
+		$subs = array();
+		foreach ( isset( $field['fields'] ) ? (array) $field['fields'] : array() as $sub ) {
+			if ( ! empty( $sub['id'] ) ) {
+				$subs[ (string) $sub['id'] ] = $sub;
+			}
+		}
+
+		$old     = array_values( array_filter( is_array( $before ) ? $before : array(), 'is_array' ) );
+		$new     = array_values( array_filter( is_array( $after ) ? $after : array(), 'is_array' ) );
+		$left    = $old;
+		$pending = array();
+
+		foreach ( $new as $index => $row ) {
+			$hit = array_search( $row, $left, true );
+			if ( false === $hit ) {
+				$pending[ $index ] = $row;
+			} else {
+				unset( $left[ $hit ] );
+			}
+		}
+
+		$out = array();
+
+		foreach ( $pending as $index => $row ) {
+			if ( isset( $left[ $index ] ) ) {
+				$base = $left[ $index ];
+				unset( $left[ $index ] );
+				/* translators: 1: field label, 2: row number */
+				$tag = sprintf( __( '%1$s, row %2$d', 'wp-mylinks' ), $label, $index + 1 );
+			} else {
+				$base = array();
+				/* translators: 1: field label, 2: row number */
+				$tag = sprintf( __( '%1$s, new row %2$d', 'wp-mylinks' ), $label, $index + 1 );
+			}
+
+			foreach ( array_keys( $base + $row ) as $key ) {
+				$was = isset( $base[ $key ] ) ? $base[ $key ] : '';
+				$now = isset( $row[ $key ] ) ? $row[ $key ] : '';
+				$own = '_id' === substr( (string) $key, -3 ) ? substr( (string) $key, 0, -3 ) : '';
+
+				if ( $was === $now
+					|| ( Wp_Mylinks_Field::is_empty_value( $was ) && Wp_Mylinks_Field::is_empty_value( $now ) )
+					|| ( '' !== $own && isset( $subs[ $own ]['type'] ) && 'file' === $subs[ $own ]['type'] ) ) {
+					continue;
+				}
+
+				$sub   = isset( $subs[ $key ] ) ? $subs[ $key ] : array( 'type' => 'text' );
+				$name  = ! empty( $sub['name'] ) ? wp_strip_all_tags( (string) $sub['name'] ) : (string) $key;
+				$out[] = array(
+					'label'  => $tag . ': ' . $name,
+					'before' => self::show( $sub, $was ),
+					'after'  => self::show( $sub, $now ),
+				);
+			}
+		}
+
+		foreach ( $left as $index => $row ) {
+			$out[] = array(
+				/* translators: 1: field label, 2: row number */
+				'label'  => sprintf( __( '%1$s, removed row %2$d', 'wp-mylinks' ), $label, $index + 1 ),
+				'before' => trim( ( isset( $row['title'] ) ? self::show( array(), $row['title'] ) : '' ) . ' ' . ( isset( $row['url'] ) ? self::show( array(), $row['url'] ) : '' ) ),
+				'after'  => '',
+			);
+		}
+
+		if ( ! $out ) {
+			$out[] = array(
+				'label'  => $label,
+				'before' => '',
+				'after'  => __( 'Rows moved to a new order', 'wp-mylinks' ),
+			);
+		}
+
+		return $out;
+	}
+
+	/**
+	 * A stored value as plain text for the review table. Long values are cut,
+	 * and the cut says how much is hidden.
+	 *
+	 * @param array $field Field args.
+	 * @param mixed $value Value.
+	 * @return string
+	 */
+	private static function show( array $field, $value ) {
+		if ( isset( $field['type'] ) && 'pw_select' === $field['type'] && ! empty( $value ) ) {
+			$url = wp_mylinks_resolve_selected_url( $value );
+			return '' !== $url ? $url : '#' . (int) $value;
+		}
+		if ( is_array( $value ) ) {
+			$value = implode( ', ', array_map( 'strval', array_filter( $value, 'is_scalar' ) ) );
+		}
+
+		$text   = is_scalar( $value ) && false !== $value ? (string) $value : '';
+		$length = mb_strlen( $text );
+
+		if ( $length <= 400 ) {
+			return $text;
+		}
+
+		return mb_substr( $text, 0, 400 ) . sprintf(
+			/* translators: %d: number of characters not shown */
+			__( '... (%d more characters)', 'wp-mylinks' ),
+			$length - 400
+		);
 	}
 
 	/**

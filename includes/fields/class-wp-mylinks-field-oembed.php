@@ -78,7 +78,8 @@ class Wp_Mylinks_Field_Oembed extends Wp_Mylinks_Field {
 		// reads so the editor preview warms the frontend cache.
 		$cache_key  = 'wp_mylinks_oembed_' . md5( $url );
 		$embed_html = get_transient( $cache_key );
-		if ( false === $embed_html ) {
+		// '' is a remembered failure; someone previewing the URL asks again.
+		if ( false === $embed_html || '' === $embed_html ) {
 			$embed_html = wp_oembed_get( $url );
 			if ( $embed_html && ! is_wp_error( $embed_html ) ) {
 				set_transient( $cache_key, $embed_html, DAY_IN_SECONDS );

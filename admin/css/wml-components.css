@@ -1570,3 +1570,20 @@ a.wml-button-secondary:visited {
   line-height: 1.5;
   margin: 4px 0 0;
 }
+
+.wml-agent-diff {
+  margin-block: 8px;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.wml-agent-diff th,
+.wml-agent-diff td {
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+
+.wml-agent-diff tbody th {
+  font-weight: 600;
+  width: 30%;
+}

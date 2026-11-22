@@ -809,7 +809,7 @@ final class Wp_Mylinks_Agent_Abilities {
 			. ' ' . __( 'Send only what should change. A list field such as links or additional-socials takes a mode. update changes only the fields you send on the rows you name: {"links": {"mode": "update", "rows": [{"index": 0, "title": "My shop"}]}}. append adds rows after the existing ones: {"links": {"mode": "append", "rows": [{"row-type": "link", "title": "Blog", "url": "https://example.com/blog"}]}}. replace makes your list the only rows, in your order, and from carries an existing row over with all its settings: {"links": {"mode": "replace", "rows": [{"from": 1}, {"from": 0, "title": "Now first"}, {"title": "New", "url": "https://example.com"}]}}.', 'wp-mylinks' )
 			. ' ' . __( 'index and from count rows from 0, while error messages call the rows you sent Row 1, Row 2 and so on. A row with has_inactive_settings holds settings that are not available right now: keep it with update or from, because a replace that would delete it is refused.', 'wp-mylinks' )
 			. ' ' . __( 'HTML is always cleaned, even for administrators, and custom scripts are out of reach. Images are Media Library attachment IDs from wp-mylinks/list-media-images; 0 clears an image. Uploading and deleting are not available.', 'wp-mylinks' )
-			. ' ' . $approval . ' ' . $refused;
+			. ' ' . $approval . ' ' . $untrusted . ' ' . $refused;
 
 		$page_id = array(
 			'type'        => 'integer',
@@ -884,7 +884,7 @@ final class Wp_Mylinks_Agent_Abilities {
 			'wp-mylinks/create-page'       => self::definition(
 				'write',
 				__( 'Create a MyLinks page', 'wp-mylinks' ),
-				__( 'Creates a new MyLinks page owned by your account, as a draft by default, with any fields in the shape wp-mylinks/update-page takes (use mode append for lists). status publish works only where the site owner lets agents publish directly and your account may publish; otherwise it is refused, so create a draft and tell the site owner it is ready. wp-mylinks/get-settings lists the themes. HTML is always cleaned, and images are Media Library attachment IDs from wp-mylinks/list-media-images.', 'wp-mylinks' ),
+				__( 'Creates a new MyLinks page owned by your account, as a draft by default, with any fields in the shape wp-mylinks/update-page takes (use mode append for lists). status publish works only where the site owner lets agents publish directly and your account may publish; otherwise it is refused, so create a draft and tell the site owner it is ready. wp-mylinks/get-settings lists the themes. HTML is always cleaned, and images are Media Library attachment IDs from wp-mylinks/list-media-images.', 'wp-mylinks' ) . ' ' . $untrusted,
 				self::object_schema(
 					array(
 						'title'  => array(

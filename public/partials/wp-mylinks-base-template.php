@@ -626,18 +626,7 @@ while ( have_posts() ) :
 			);
 		} elseif ( '' !== $embed && '' === $youtube_url ) {
 			// 2. Generic oEmbed (TikTok, Spotify, Tweets, etc).
-			$cache_key  = 'wp_mylinks_oembed_' . md5( $embed );
-			$embed_html = get_transient( $cache_key );
-			if ( false === $embed_html ) {
-				// wp_oembed_get() output is already filtered by core. The previous
-				// wp_filter_oembed_result() call here passed a URL string where core
-				// expects the oEmbed data object — a no-op that raised "property on
-				// string" warnings on PHP 8. Removed in 1.1.0.
-				$embed_html = wp_oembed_get( $embed );
-				if ( $embed_html && ! is_wp_error( $embed_html ) ) {
-					set_transient( $cache_key, $embed_html, DAY_IN_SECONDS );
-				}
-			}
+			$embed_html = wp_mylinks_resolve_embed( $embed );
 
 			if ( is_string( $embed_html ) && '' !== $embed_html ) {
 				$inner = $embed_html;

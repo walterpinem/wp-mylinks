@@ -191,7 +191,7 @@ The new "Additional Social Platforms" metabox on the MyLink editor (right under 
 Yes. WP MyLinks makes its page tools available to AI agents through the WordPress Abilities API, which is part of WordPress 6.9 and newer. The free MCP Adapter plugin is what lets an MCP client such as Claude Desktop or Claude Code connect to them. Agent access is off by default, so nothing changes until you choose Read only or Read and edit under MyLinks, Settings, AI agents. The rest of WP MyLinks keeps running on WordPress 6.0 and newer.
 
 = Can an AI agent publish or break my pages? =
-By default, no change to a published page goes live without you. The agent's edit is stored as a proposal, and the page's edit screen shows a preview with Approve and Discard buttons. New pages stay drafts. If you choose "Publish directly, with undo", an agent's change reaches visitors as soon as it is made, and each page offers Undo. Agents have no way to delete pages, upload files or change site-wide settings, and HTML they send is always cleaned. Two limits apply. An agent whose user may publish pages can still change a page's status through WordPress itself, so use a dedicated user with the lowest role that does the job, such as Editor. And text an agent reads can try to steer it, which no plugin can fully prevent, so review what it changes.
+By default, no change to a published page goes live without you. The agent's edit is stored as a proposal, and the page's edit screen lists every proposed change, with a preview and Approve and Discard buttons. New pages stay drafts. If you choose "Publish directly, with undo", an agent's change reaches visitors as soon as it is made, and each page offers Undo. Agents have no way to delete pages, upload files or change site-wide settings, and HTML they send is always cleaned. Two limits apply. An application password works for everything its user can do on the site, and with "Publish directly" that includes changing or trashing MyLinks pages through the WordPress APIs, so use a dedicated user with the lowest role that does the job, such as Editor. And text an agent reads can try to steer it, which no plugin can fully prevent, so review what it changes.
 
 = How do I connect Claude or another AI client? =
 Install and activate the MCP Adapter plugin, turn on agent access under MyLinks, Settings, AI agents, and create an application password on the user the agent will act as. Local sites can connect over STDIO with `wp mcp-adapter serve`. Other sites connect over HTTP at `/wp-json/mcp/mcp-adapter-default-server` with that application password. The step-by-step guide, with client configuration, is at [onlinestorekit.com/docs/wml/agents/connect](https://www.onlinestorekit.com/docs/wml/agents/connect/ "Connect an AI agent to WP MyLinks").
@@ -224,6 +224,8 @@ AI agents release.
 * [New] **AI agents (MCP)**. AI agents can now list, read, create and edit MyLinks pages over MCP. It needs WordPress 6.9 or newer and the free MCP Adapter plugin, and it is off by default. The plugin itself still runs on WordPress 6.0.
 * [New] **AI agents settings tab**. Under MyLinks, Settings, AI agents, choose the access (Off, Read only, Read and edit), choose whether agent changes to published pages Wait for my approval or Publish directly with undo, and follow a connect checklist.
 * [New] **Review and undo**. Agent changes are logged, with Undo on each page. Proposals have a preview, Approve and Discard.
+* [Security] MyLinks page fields, including custom page scripts, are now protected, so they can no longer be read or changed as generic custom fields over XML-RPC.
+* [Improved] Media embeds: a failed embed is remembered for 15 minutes and one page view looks up at most 10 new embeds, so dead embed links cannot hold up the page.
 * [Fixed] Live Builder preview reloads no longer count as page visits.
 * [Misc] Plugin Check cleanup. The `wpmylinks_url_params` filter is now `wp_mylinks_url_params`, and the old name still works but is deprecated. The helper `wpmylinks_url()` is now `wp_mylinks_url()`.
 
@@ -432,7 +434,7 @@ Maintenance release: WordPress 7.1 compatibility and housekeeping.
 
 == Upgrade Notice ==
 = 1.2.0 - November 23, 2026 =
-New: AI agents can list, read, create and edit your pages over MCP. Off by default, needs WordPress 6.9 and the MCP Adapter plugin, and changes wait for your approval. Also fixes Live Builder previews counting as visits.
+New: AI agents can list, read, create and edit your pages over MCP. Off by default, needs WordPress 6.9 and the MCP Adapter plugin, and changes wait for your approval. Also protects page fields from XML-RPC and fixes Live Builder previews counting as visits.
 
 = 1.1.2 - November 22, 2026 =
 Editor polish: X (Twitter) labels, YouTube spelling, consistent Meta Description fields, the gold focus ring, and the new overview video on the Welcome tab. No data changes. Safe update for all users.

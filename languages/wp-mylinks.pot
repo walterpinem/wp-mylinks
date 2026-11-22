@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-22T21:28:37+00:00\n"
+"POT-Creation-Date: 2026-11-22T21:44:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-mylinks\n"
@@ -265,7 +265,7 @@ msgid "Agents can list your pages and read their content, view and click counts,
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-agents.php:329
-msgid "Agents can also create pages and change their profile, links, social icons, appearance and SEO. HTML is always cleaned and custom scripts stay out of reach. MyLinks tools for agents never delete or upload, but an agent whose account may publish can still change a page's status through WordPress itself, so give it an account with the lowest role that does the job."
+msgid "Agents can also create pages and change their profile, links, social icons, appearance and SEO. HTML is always cleaned and custom scripts stay out of reach. MyLinks tools for agents never delete or upload. Give the agent an account with the lowest role that does the job, because its password also works for that account's other content on this site."
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-agents.php:331
@@ -293,7 +293,7 @@ msgid "Publish directly, with undo"
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-agents.php:351
-msgid "An agent's change reaches visitors as soon as it is made, and an agent may publish new pages. Each page's edit screen then offers Undo. Faster, but a wrong or manipulated change is public until you undo it."
+msgid "An agent's change reaches visitors as soon as it is made, and an agent may publish new pages. Each page's edit screen then offers Undo. Faster, but a wrong or manipulated change is public until you undo it. With this choice, the account's password can also change or trash MyLinks pages through the WordPress APIs, outside these tools and without Undo."
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-agents.php:353
@@ -1207,47 +1207,102 @@ msgstr ""
 msgid "An AI agent working as %1$s proposes changes to this page: %2$s. Visitors still see the current page."
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:481
+#: includes/agent/class-wp-mylinks-agent-approval.php:482
 msgid "Preview proposed page"
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:482
+#: includes/agent/class-wp-mylinks-agent-approval.php:483
 msgid "Approve and publish"
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:483
+#: includes/agent/class-wp-mylinks-agent-approval.php:484
 msgid "Discard"
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:499
+#: includes/agent/class-wp-mylinks-agent-approval.php:503
+#: includes/agent/class-wp-mylinks-agent-changes.php:359
+#: includes/class-wp-mylinks-metaboxes.php:344
+msgid "Title"
+msgstr ""
+
+#: includes/agent/class-wp-mylinks-agent-approval.php:503
+#: includes/agent/class-wp-mylinks-agent-changes.php:361
+msgid "Slug"
+msgstr ""
+
+#: includes/agent/class-wp-mylinks-agent-approval.php:555
+msgid "Field"
+msgstr ""
+
+#: includes/agent/class-wp-mylinks-agent-approval.php:556
+msgid "Now"
+msgstr ""
+
+#: includes/agent/class-wp-mylinks-agent-approval.php:557
+msgid "Proposed"
+msgstr ""
+
+#: includes/agent/class-wp-mylinks-agent-approval.php:571
+msgid "Check every line here, not only the preview: a link can be set to show only to some visitors, so the preview may not show it to you."
+msgstr ""
+
+#. translators: 1: field label, 2: row number
+#: includes/agent/class-wp-mylinks-agent-approval.php:614
+#, php-format
+msgid "%1$s, row %2$d"
+msgstr ""
+
+#. translators: 1: field label, 2: row number
+#: includes/agent/class-wp-mylinks-agent-approval.php:618
+#, php-format
+msgid "%1$s, new row %2$d"
+msgstr ""
+
+#. translators: 1: field label, 2: row number
+#: includes/agent/class-wp-mylinks-agent-approval.php:645
+#, php-format
+msgid "%1$s, removed row %2$d"
+msgstr ""
+
+#: includes/agent/class-wp-mylinks-agent-approval.php:655
+msgid "Rows moved to a new order"
+msgstr ""
+
+#. translators: %d: number of characters not shown
+#: includes/agent/class-wp-mylinks-agent-approval.php:688
+#, php-format
+msgid "... (%d more characters)"
+msgstr ""
+
+#: includes/agent/class-wp-mylinks-agent-approval.php:702
 msgid "Waiting for approval"
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:513
+#: includes/agent/class-wp-mylinks-agent-approval.php:716
 msgid "Proposal approved. Visitors now see the agent's changes."
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:514
+#: includes/agent/class-wp-mylinks-agent-approval.php:717
 msgid "Proposal discarded. The page was not changed."
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:515
+#: includes/agent/class-wp-mylinks-agent-approval.php:718
 msgid "Not applied: this page changed after the agent made its proposal. Discard it, then ask the agent to work from the current page."
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:516
+#: includes/agent/class-wp-mylinks-agent-approval.php:719
 msgid "Nothing was done: the proposal changed after this screen loaded. Review it below."
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:517
+#: includes/agent/class-wp-mylinks-agent-approval.php:720
 msgid "Not applied: someone else is editing this page."
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:518
+#: includes/agent/class-wp-mylinks-agent-approval.php:721
 msgid "There is no proposal on this page."
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-approval.php:519
+#: includes/agent/class-wp-mylinks-agent-approval.php:722
 msgid "The proposal could not be applied."
 msgstr ""
 
@@ -1283,15 +1338,6 @@ msgstr ""
 msgid "a removed user"
 msgstr ""
 
-#: includes/agent/class-wp-mylinks-agent-changes.php:359
-#: includes/class-wp-mylinks-metaboxes.php:344
-msgid "Title"
-msgstr ""
-
-#: includes/agent/class-wp-mylinks-agent-changes.php:361
-msgid "Slug"
-msgstr ""
-
 #: includes/agent/class-wp-mylinks-agent-changes.php:383
 msgid "Agent changes undone."
 msgstr ""
@@ -1314,6 +1360,10 @@ msgstr ""
 
 #: includes/agent/class-wp-mylinks-agent-changes.php:388
 msgid "The page could not be restored."
+msgstr ""
+
+#: includes/agent/class-wp-mylinks-agent-guard.php:113
+msgid "This site does not let application passwords change MyLinks pages through the REST API. Use the wp-mylinks abilities over MCP, which follow the site's approval setting."
 msgstr ""
 
 #: includes/agent/class-wp-mylinks-agent-state.php:188
@@ -2229,7 +2279,7 @@ msgstr ""
 msgid "No URL given."
 msgstr ""
 
-#: includes/fields/class-wp-mylinks-field-oembed.php:89
+#: includes/fields/class-wp-mylinks-field-oembed.php:90
 msgid "No embeddable media found at that URL."
 msgstr ""
 
@@ -2245,40 +2295,40 @@ msgid "Skip to content"
 msgstr ""
 
 #. translators: %s: the reason the embed failed.
-#: public/partials/wp-mylinks-base-template.php:647
+#: public/partials/wp-mylinks-base-template.php:636
 #, php-format
 msgid "Unable to embed the content. Reason: %s"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:651
+#: public/partials/wp-mylinks-base-template.php:640
 msgid "Unable to embed the content."
 msgstr ""
 
 #. translators: %s: link title
-#: public/partials/wp-mylinks-base-template.php:662
-#: public/partials/wp-mylinks-base-template.php:682
-#: public/partials/wp-mylinks-base-template.php:696
+#: public/partials/wp-mylinks-base-template.php:651
+#: public/partials/wp-mylinks-base-template.php:671
+#: public/partials/wp-mylinks-base-template.php:685
 #, php-format
 msgid "%s (opens in a new tab)"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:741
+#: public/partials/wp-mylinks-base-template.php:730
 msgid "Profile picture"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:772
+#: public/partials/wp-mylinks-base-template.php:761
 msgid "Search links"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:773
+#: public/partials/wp-mylinks-base-template.php:762
 msgid "Search links…"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:774
+#: public/partials/wp-mylinks-base-template.php:763
 msgid "No links match your search."
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:812
+#: public/partials/wp-mylinks-base-template.php:801
 msgid "Made with ❤️ and ☕ by <a href=\"https://walterpinem.me/\" target=\"_blank\" rel=\"noopener nofollow\"><strong>Walter Pinem</strong></a>"
 msgstr ""
 
@@ -2358,6 +2408,6 @@ msgstr ""
 msgid "Klepon Viral"
 msgstr ""
 
-#: wp-mylinks.php:1513
+#: wp-mylinks.php:1559
 msgid "Home"
 msgstr ""

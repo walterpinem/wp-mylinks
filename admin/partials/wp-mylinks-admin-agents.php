@@ -326,7 +326,7 @@ function wp_mylinks_render_agents_tab() {
 			'write',
 			$stored,
 			__( 'Read and edit', 'wp-mylinks' ),
-			__( 'Agents can also create pages and change their profile, links, social icons, appearance and SEO. HTML is always cleaned and custom scripts stay out of reach. MyLinks tools for agents never delete or upload, but an agent whose account may publish can still change a page\'s status through WordPress itself, so give it an account with the lowest role that does the job.', 'wp-mylinks' )
+			__( 'Agents can also create pages and change their profile, links, social icons, appearance and SEO. HTML is always cleaned and custom scripts stay out of reach. MyLinks tools for agents never delete or upload. Give the agent an account with the lowest role that does the job, because its password also works for that account\'s other content on this site.', 'wp-mylinks' )
 		);
 		echo '<p class="wml-field__help">' . esc_html__( 'Site-wide settings stay read only: an agent can recommend changes, and you apply them on the General tab.', 'wp-mylinks' ) . '</p>';
 		wp_mylinks_card_close();
@@ -348,7 +348,7 @@ function wp_mylinks_render_agents_tab() {
 			'live',
 			$publish,
 			__( 'Publish directly, with undo', 'wp-mylinks' ),
-			__( 'An agent\'s change reaches visitors as soon as it is made, and an agent may publish new pages. Each page\'s edit screen then offers Undo. Faster, but a wrong or manipulated change is public until you undo it.', 'wp-mylinks' )
+			__( 'An agent\'s change reaches visitors as soon as it is made, and an agent may publish new pages. Each page\'s edit screen then offers Undo. Faster, but a wrong or manipulated change is public until you undo it. With this choice, the account\'s password can also change or trash MyLinks pages through the WordPress APIs, outside these tools and without Undo.', 'wp-mylinks' )
 		);
 		echo '<p class="wml-field__help">' . esc_html__( 'Text an agent reads can try to steer it. Whichever you choose, keep the agent\'s account limited and review what it changes.', 'wp-mylinks' ) . '</p>';
 		wp_mylinks_card_close();

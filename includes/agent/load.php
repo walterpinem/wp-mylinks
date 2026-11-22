@@ -18,6 +18,9 @@ require_once __DIR__ . '/class-wp-mylinks-agent-state.php';
 require_once __DIR__ . '/class-wp-mylinks-agent-changes.php';
 require_once __DIR__ . '/class-wp-mylinks-agent-approval.php';
 require_once __DIR__ . '/class-wp-mylinks-agent-abilities.php';
+require_once __DIR__ . '/class-wp-mylinks-agent-guard.php';
+
+Wp_Mylinks_Agent_Guard::register();
 
 // These hooks fire only on WordPress with the Abilities API, and only when
 // something asks for abilities.

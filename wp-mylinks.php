@@ -1008,6 +1008,52 @@ function wp_mylinks_get_social_meta( $platform ) {
 }
 
 /**
+ * Embed HTML for a public page, cached.
+ *
+ * A failed lookup is remembered for a short while and a single render makes a
+ * limited number of remote lookups, so a page full of dead embed URLs cannot
+ * hold a PHP worker for minutes on every view. Rows past the limit fill in on
+ * later views, so that render is kept out of page caches.
+ *
+ * wp_oembed_get() output is already filtered by core.
+ *
+ * @since 1.2.0
+ *
+ * @param string $url Embed URL.
+ * @return string|false|WP_Error HTML, or an empty value when unavailable.
+ */
+function wp_mylinks_resolve_embed( $url ) {
+	static $fetched = 0;
+
+	$cache_key = 'wp_mylinks_oembed_' . md5( (string) $url );
+	$cached    = get_transient( $cache_key );
+
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
+	// ponytail: fixed cap of 10 lookups per render, make it a filter if a real page needs more.
+	if ( $fetched >= 10 ) {
+		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+			define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- The convention page-cache plugins read.
+		}
+		return '';
+	}
+	++$fetched;
+
+	$html = wp_oembed_get( $url );
+
+	if ( $html && ! is_wp_error( $html ) ) {
+		set_transient( $cache_key, $html, DAY_IN_SECONDS );
+		return $html;
+	}
+
+	set_transient( $cache_key, '', 15 * MINUTE_IN_SECONDS );
+
+	return $html;
+}
+
+/**
  * Extract a YouTube video ID from any common URL format.
  *
  * Supports:
