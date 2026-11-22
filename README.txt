@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/WalterPinem
 Tags: linktree, link in bio, landing page, social profile, schema
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -194,6 +194,15 @@ WP MyLinks bundles these open-source libraries, served locally from your own sit
 
 == Changelog ==
 The complete, formatted version history is also published at [onlinestorekit.com/changelog/wp-mylinks](https://www.onlinestorekit.com/changelog/wp-mylinks/ "WP MyLinks Changelog").
+
+= 1.1.2 - November 22, 2026 =
+
+Editor polish release.
+
+* [Improved] The social profile fields now read "X (Twitter) URL" and "X (Twitter) Icon" to match the X icon. Field IDs and saved data are unchanged.
+* [Improved] The per-page and global Meta Description boxes now look like the other text fields instead of the code-editor style.
+* [Fixed] Text inputs in the editor showed the WordPress admin color scheme's focus ring instead of the plugin's gold one.
+* [Fixed] "YouTube" is now spelled correctly in field labels and help text (it was "Youtube").
 
 = 1.1.1 - August 25, 2026 =
 
@@ -389,6 +398,9 @@ Maintenance release: WordPress 7.1 compatibility and housekeeping.
 * Initial release: Hello World!
 
 == Upgrade Notice ==
+= 1.1.2 - November 22, 2026 =
+Editor polish: social fields now say "X (Twitter)", "YouTube" is spelled correctly, the Meta Description boxes match the other text fields, and text inputs show the plugin's gold focus ring. No data changes. Safe update for all users.
+
 = 1.1.1 - August 25, 2026 =
 Maintenance release: WordPress 7.1 compatibility, a refreshed More Plugins tab, the plugin's own brand menu icon, bundled-library credits, and a small Export button fix. Safe update for all users.
 
