@@ -12,7 +12,7 @@
  * Plugin Name:       WP MyLinks
  * Plugin URI:        https://www.onlinestorekit.com/wp-mylinks/
  * Description:       Easily build your own micro landing page showing all the links you want to share to engage your audience. Use your own brand, link it anywhere.
- * Version:           1.1.2
+ * Version:           1.2.0
  * Author:            Walter Pinem
  * Author URI:        https://walterpinem.me/
  * License:           GPL-2.0+
@@ -33,7 +33,7 @@ if ( ! defined('WPINC') ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  */
 define('WP_MYLINKS_NAME', 'WP MyLinks');
-define('WP_MYLINKS_VERSION', '1.1.2');
+define('WP_MYLINKS_VERSION', '1.2.0');
 define('WP_MYLINKS_PREFIX', 'mylinks_');
 define('WP_MYLINKS_FILE', __FILE__);
 define('WP_MYLINKS_PATH', plugin_dir_path(__FILE__));

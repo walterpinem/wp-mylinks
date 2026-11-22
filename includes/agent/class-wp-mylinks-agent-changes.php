@@ -287,7 +287,7 @@ final class Wp_Mylinks_Agent_Changes {
 		$message  = sprintf(
 			/* translators: 1: user name(s), 2: number of changes, 3: list of changed fields */
 			_n(
-				'An AI agent working as %1$s changed this page once since your last review: %3$s.',
+				'An AI agent working as %1$s changed this page %2$d time since your last review: %3$s.',
 				'An AI agent working as %1$s changed this page %2$d times since your last review: %3$s.',
 				(int) $pending['writes'],
 				'wp-mylinks'
