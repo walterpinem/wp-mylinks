@@ -400,7 +400,7 @@ Maintenance release: WordPress 7.1 compatibility and housekeeping.
 
 == Upgrade Notice ==
 = 1.1.2 - November 22, 2026 =
-Editor polish: social fields now say "X (Twitter)", "YouTube" is spelled correctly, the Meta Description boxes match the other text fields, text inputs show the plugin's gold focus ring, and the Welcome tab plays the new overview video. No data changes. Safe update for all users.
+Editor polish: X (Twitter) labels, YouTube spelling, consistent Meta Description fields, the gold focus ring, and the new overview video on the Welcome tab. No data changes. Safe update for all users.
 
 = 1.1.1 - August 25, 2026 =
 Maintenance release: WordPress 7.1 compatibility, a refreshed More Plugins tab, the plugin's own brand menu icon, bundled-library credits, and a small Export button fix. Safe update for all users.
