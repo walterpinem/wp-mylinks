@@ -85,6 +85,7 @@ require WP_MYLINKS_PATH . 'includes/class-wp-mylinks.php';
 require WP_MYLINKS_PATH . 'includes/fields/load.php';
 require WP_MYLINKS_PATH . 'includes/agent/load.php';
 require WP_MYLINKS_PATH . 'admin/partials/wp-mylinks-admin-settings.php';
+require WP_MYLINKS_PATH . 'admin/partials/wp-mylinks-admin-agents.php';
 require WP_MYLINKS_PATH . 'includes/class-wp-mylinks-more-plugins.php';
 require WP_MYLINKS_PATH . 'includes/class-wp-mylinks-tools.php';
 require WP_MYLINKS_PATH . 'includes/class-wp-mylinks-post-type.php';

@@ -1483,3 +1483,90 @@ a.wml-button-secondary:visited {
 .wml-field .select2-selection__clear:hover > span::before {
   opacity: 0.7;
 }
+
+/* ============================================================================
+   AI agents tab
+   ========================================================================= */
+
+.wml-choice {
+  align-items: flex-start;
+  background: var(--wml-canvas);
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  margin-block-end: 10px;
+  padding: 14px 16px;
+}
+
+.wml-choice:hover {
+  background: var(--wml-canvas-soft);
+}
+
+.wml-choice:has(input:checked) {
+  background: var(--wml-brand-tint);
+  border-color: var(--wml-brand-strong);
+}
+
+.wml-choice input[type="radio"] {
+  flex-shrink: 0;
+  margin: 2px 0 0;
+}
+
+.wml-choice__text strong {
+  color: var(--wml-ink);
+  display: block;
+  font-size: 14px;
+  margin-block-end: 4px;
+}
+
+.wml-choice__text small {
+  color: var(--wml-muted);
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.wml-agent-checklist {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.wml-agent-checklist li {
+  border-block-end: 1px solid var(--wml-line);
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 14px 0;
+}
+
+.wml-agent-checklist li:last-child {
+  border-block-end: 0;
+}
+
+.wml-agent-checklist .dashicons {
+  flex-shrink: 0;
+}
+
+.wml-agent-checklist__done .dashicons {
+  color: var(--wml-success);
+}
+
+.wml-agent-checklist__todo .dashicons {
+  color: var(--wml-warning);
+}
+
+.wml-agent-checklist strong {
+  color: var(--wml-ink);
+  display: block;
+  font-size: 14px;
+}
+
+.wml-agent-checklist p {
+  color: var(--wml-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 4px 0 0;
+}

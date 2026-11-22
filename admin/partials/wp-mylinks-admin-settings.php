@@ -421,6 +421,7 @@ function wp_mylinks_admin_page() {
 		'global'           => array( 'admin-generic', __( 'General', 'wp-mylinks' ) ),
 		'script'           => array( 'editor-code', __( 'Scripts', 'wp-mylinks' ) ),
 		'tools'            => array( 'admin-tools', __( 'Tools', 'wp-mylinks' ) ),
+		'agents'           => array( 'rest-api', __( 'AI agents', 'wp-mylinks' ), 'wp_mylinks_render_agents_tab' ),
 		'tutorial_support' => array( 'sos', __( 'Support', 'wp-mylinks' ) ),
 	);
 
