@@ -69,6 +69,9 @@ $wp_mylinks_options_to_delete = array(
 	// 1.1.0 additions (font family, Link URL sources).
 	'wp_mylinks_font_family',
 	'wp_mylinks_link_post_types',
+	// 1.2.0 additions (AI agents).
+	'wp_mylinks_agent_access',
+	'wp_mylinks_agent_publish',
 );
 foreach ( $wp_mylinks_options_to_delete as $wp_mylinks_opt ) {
 	delete_option($wp_mylinks_opt);
@@ -76,6 +79,12 @@ foreach ( $wp_mylinks_options_to_delete as $wp_mylinks_opt ) {
 	if ( is_multisite() ) {
 		delete_site_option($wp_mylinks_opt);
 	}
+}
+
+// --- Delete AI agent review records ------------------------------------------
+
+foreach ( array( '_wp_mylinks_agent_log', '_wp_mylinks_agent_pending', '_wp_mylinks_agent_proposal', '_wp_mylinks_agent_hold' ) as $wp_mylinks_agent_key ) {
+	delete_post_meta_by_key($wp_mylinks_agent_key);
 }
 
 // --- Delete oEmbed transients ------------------------------------------------

@@ -76,6 +76,12 @@ final class Wp_Mylinks_Agent_Abilities {
 			return;
 		}
 
+		// Another plugin may start the registry earlier in init than the
+		// field boxes register, which would leave the schemas empty.
+		if ( ! isset( Wp_Mylinks_Metabox::boxes()[ mylinks_prefix( 'form' ) ] ) ) {
+			wp_mylinks_register_metaboxes();
+		}
+
 		foreach ( self::definitions() as $name => $definition ) {
 			$level = $definition['level'];
 			unset( $definition['level'] );
