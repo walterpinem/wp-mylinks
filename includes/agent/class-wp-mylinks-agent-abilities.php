@@ -53,7 +53,10 @@ final class Wp_Mylinks_Agent_Abilities {
 	 * @return void
 	 */
 	public static function register_category() {
-		if ( ! Wp_Mylinks_Agent_Access::allows( 'read' ) || wp_has_ability_category( self::CATEGORY ) ) {
+		if ( ! function_exists( 'wp_has_ability_category' )
+			|| ! function_exists( 'wp_register_ability_category' )
+			|| ! Wp_Mylinks_Agent_Access::allows( 'read' )
+			|| wp_has_ability_category( self::CATEGORY ) ) {
 			return;
 		}
 
@@ -72,7 +75,11 @@ final class Wp_Mylinks_Agent_Abilities {
 	 * @return void
 	 */
 	public static function register_abilities() {
-		if ( ! Wp_Mylinks_Agent_Access::allows( 'read' ) || ! wp_has_ability_category( self::CATEGORY ) ) {
+		if ( ! function_exists( 'wp_has_ability_category' )
+			|| ! function_exists( 'wp_has_ability' )
+			|| ! function_exists( 'wp_register_ability' )
+			|| ! Wp_Mylinks_Agent_Access::allows( 'read' )
+			|| ! wp_has_ability_category( self::CATEGORY ) ) {
 			return;
 		}
 
@@ -386,7 +393,7 @@ final class Wp_Mylinks_Agent_Abilities {
 		}
 
 		/** This filter is documented in wp-admin/includes/ajax-actions.php */
-		$args = apply_filters( 'ajax_query_attachments_args', $args );
+		$args = apply_filters( 'ajax_query_attachments_args', $args ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core's own filter, so the list matches the editor's media picker.
 		$args = is_array( $args ) ? $args : array();
 		$mime = isset( $args['post_mime_type'] ) ? $args['post_mime_type'] : 'image';
 
@@ -656,7 +663,7 @@ final class Wp_Mylinks_Agent_Abilities {
 		$lock = explode( ':', (string) get_post_meta( $post->ID, '_edit_lock', true ) );
 		if ( 2 === count( $lock ) && (int) $lock[1] === get_current_user_id()
 			/** This filter is documented in wp-admin/includes/ajax-actions.php */
-			&& (int) $lock[0] > time() - (int) apply_filters( 'wp_check_post_lock_window', 150 ) ) {
+			&& (int) $lock[0] > time() - (int) apply_filters( 'wp_check_post_lock_window', 150 ) ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core's own filter.
 			$warnings[] = __( 'Your account also has this page open in the editor. Saving that screen would overwrite this change.', 'wp-mylinks' );
 		}
 
@@ -739,7 +746,7 @@ final class Wp_Mylinks_Agent_Abilities {
 	 * @return array|WP_Error
 	 */
 	private static function typed( $name, $input ) {
-		$ability = wp_get_ability( $name );
+		$ability = function_exists( 'wp_get_ability' ) ? wp_get_ability( $name ) : null;
 		$schema  = $ability ? $ability->get_input_schema() : array( 'type' => 'object' );
 		$input   = null === $input ? array() : $input;
 		$valid   = rest_validate_value_from_schema( $input, $schema, 'input' );
