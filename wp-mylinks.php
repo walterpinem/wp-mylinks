@@ -62,20 +62,20 @@ function mylinks_collection( $key ) {
 /**
  * Activation: flush rewrite rules so /<post-name>/ resolves immediately.
  */
-function activate_wp_mylinks() {
+function wp_mylinks_activate() {
 	require_once WP_MYLINKS_PATH . 'includes/class-wp-mylinks-activator.php';
 	Wp_Mylinks_Activator::activate();
 }
-register_activation_hook(__FILE__, 'activate_wp_mylinks');
+register_activation_hook(__FILE__, 'wp_mylinks_activate');
 
 /**
  * Deactivation: drop the CPT's rewrite rules cleanly. Does NOT delete user data.
  */
-function deactivate_wp_mylinks() {
+function wp_mylinks_deactivate() {
 	require_once WP_MYLINKS_PATH . 'includes/class-wp-mylinks-deactivator.php';
 	Wp_Mylinks_Deactivator::deactivate();
 }
-register_deactivation_hook(__FILE__, 'deactivate_wp_mylinks');
+register_deactivation_hook(__FILE__, 'wp_mylinks_deactivate');
 
 /**
  * The core plugin classes that are used to define internationalization,
@@ -206,7 +206,7 @@ function wp_mylinks_isYoastActive() { // phpcs:ignore WordPress.NamingConvention
  */
 if ( ! function_exists('wp_mylinks_is_bot_request') ) {
 	function wp_mylinks_is_bot_request() {
-		$ua = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower( (string) wp_unslash($_SERVER['HTTP_USER_AGENT'])) : '';
+		$ua = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower( sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) ) : '';
 		return '' === $ua || (bool) preg_match('/bot|crawl|spider|slurp|curl|wget|python-|headless|lighthouse|pingdom|monitor|preview|facebookexternalhit/', $ua);
 	}
 }
@@ -1100,14 +1100,14 @@ if ( 'yes' === get_option('wp_mylinks_dequeue') ) {
  * are deliberately left alone.
  *
  * Matches the shared Online Store Kit helper shape (see Indonesian Banks'
- * `ibfw_url()`); the `wpmylinks_url_params` filter name predates that and is
- * kept as public API.
+ * `ibfw_url()`); the filter was renamed from `wpmylinks_url_params` to
+ * `wp_mylinks_url_params` in 1.2.0, and the old name still works (deprecated).
  *
  * @param string $base_url URL to decorate.
  * @return string          Fully escaped URL.
  */
-if ( ! function_exists('wpmylinks_url') ) {
-	function wpmylinks_url( $base_url ) {
+if ( ! function_exists('wp_mylinks_url') ) {
+	function wp_mylinks_url( $base_url ) {
 		$base_url = esc_url_raw($base_url);
 
 		if ( function_exists('get_user_locale') ) {
@@ -1144,7 +1144,9 @@ if ( ! function_exists('wpmylinks_url') ) {
 		 * @param array  $params   Parameters before the URL is built.
 		 * @param string $base_url The original URL.
 		 */
-		$params = apply_filters('wpmylinks_url_params', $params, $base_url);
+		$params = apply_filters('wp_mylinks_url_params', $params, $base_url);
+		// Backward compatibility: the pre-1.2.0 hook name. Notices only when something is hooked to it.
+		$params = apply_filters_deprecated('wpmylinks_url_params', array($params, $base_url), '1.2.0', 'wp_mylinks_url_params'); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Deprecated pre-1.2.0 hook name, kept for backward compatibility.
 
 		return esc_url(add_query_arg($params, $base_url));
 	}
@@ -1228,7 +1230,7 @@ if ( ! function_exists('wp_mylinks_yoast_handles_schema') ) {
 		// Yoast 14+ outputs schema by default. Allow site owners to opt out
 		// via the standard wpseo_json_ld_output filter (returns false to
 		// disable). We mirror that contract.
-		$enabled = apply_filters('wpseo_json_ld_output', '', '');
+		$enabled = apply_filters('wpseo_json_ld_output', '', ''); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Yoast SEO's own filter.
 		return false !== $enabled;
 	}
 }
@@ -1621,8 +1623,8 @@ if ( ! function_exists('wp_mylinks_sanitize_twitter_handle') ) {
  *
  * @since 1.0.0
  */
-function run_wp_mylinks() {
+function wp_mylinks_run() {
 	$plugin = new Wp_Mylinks();
 	$plugin->run();
 }
-run_wp_mylinks();
+wp_mylinks_run();

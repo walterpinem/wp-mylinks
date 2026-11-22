@@ -406,19 +406,10 @@ Editor polish: X (Twitter) labels, YouTube spelling, consistent Meta Description
 Maintenance release: WordPress 7.1 compatibility, a refreshed More Plugins tab, the plugin's own brand menu icon, bundled-library credits, and a small Export button fix. Safe update for all users.
 
 = 1.1.0 - August 19, 2026 =
-Major release. New from your requests: section headings, a search/filter bar, HTML blocks, custom fonts, icon-font classes for social links, and a Google Tag Manager dataLayer event. Plus a per-link click counter, QR codes, accent colors, crisp SVG social icons, a full admin redesign, and a 4 times smaller download (the bundled CMB2 framework was replaced by the plugin's own fields system, with zero migration and byte-identical data). Recommended for all users.
+Major release. New: section headings, a search/filter bar, HTML blocks, custom fonts, social icon classes, a GTM dataLayer event, click counts, QR codes, accent colors, and a redesigned admin. Own fields system replaces CMB2, no migration. Recommended for all users.
 
 = 1.0.8 - May 23, 2026 =
 Big release! Adds Schema.org JSON-LD, Open Graph and Twitter Card meta tags, and the new Additional Social Platforms metabox (Threads, Bluesky, GitHub, Mastodon). Plus WCAG 2.2 accessibility, WordPress 7.0 compatibility, and the long-awaited permalink 404 fix. Recommended for all users.
 
 = 1.0.7 - September 26, 2024 =
-* [Security] Fixed Cross Site Scripting (XSS) vulnerability as discovered and reported by SOPROBRO to Patchstack, reported by Darius Sveikauskas (Kudos to SOPROBRO, Darius Sveikauskas and Patchstack)
-* [Fixed] Fixed JavaScript issues preventing users to add new links
-* [Fixed] Fixed several unsanitized fields on the MyLinks page output
-* [Fixed] CSS issues making several templates not responsive on smaller screens
-* [New] Added extra options for Transparent avatar style and adding scripts to after the open <body> tag
-* [Misc] Changed and optimized several fields on the MyLinks editor screen
-* [Misc] Updated CMB2 to the latest version 2.11.0
-* [Misc] Updated select2.min.js to the latest version 4.1.0-rc.0
-* [Misc] Optimized a large part of the MyLinks page template
-* [Misc] Compatibility with latest version of WordPress v6.6.2
+Security release: fixes a Cross Site Scripting (XSS) vulnerability reported through Patchstack (kudos to SOPROBRO and Darius Sveikauskas), plus unsanitized fields, link-adding JavaScript issues, and responsive CSS. Recommended for all users.

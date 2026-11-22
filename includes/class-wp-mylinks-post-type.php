@@ -156,11 +156,11 @@ function wp_mylinks_render_qr_meta_box( $post ) {
  * @since 1.0.3
  */
 function wp_mylinks_custom_sidebar_utm() {
-	$en_url = function_exists('wpmylinks_url')
-		? wpmylinks_url('https://walterpinem.me/projects/tools/utm-tag-builder/')
+	$en_url = function_exists('wp_mylinks_url')
+		? wp_mylinks_url('https://walterpinem.me/projects/tools/utm-tag-builder/')
 		: 'https://walterpinem.me/projects/tools/utm-tag-builder/';
-	$id_url = function_exists('wpmylinks_url')
-		? wpmylinks_url('https://www.seniberpikir.com/utm-campaign-builder-google-analytics/')
+	$id_url = function_exists('wp_mylinks_url')
+		? wp_mylinks_url('https://www.seniberpikir.com/utm-campaign-builder-google-analytics/')
 		: 'https://www.seniberpikir.com/utm-campaign-builder-google-analytics/';
 	?>
 	<ul>
@@ -188,12 +188,12 @@ function wp_mylinks_custom_sidebar_utm() {
  */
 function wp_mylinks_custom_sidebar_support() {
 	$review_url = 'https://wordpress.org/support/plugin/wp-mylinks/reviews/?rate=5#new-post';
-	$contact    = function_exists('wpmylinks_url')
-		? wpmylinks_url('https://www.onlinestorekit.com/support/')
+	$contact    = function_exists('wp_mylinks_url')
+		? wp_mylinks_url('https://www.onlinestorekit.com/support/')
 		: 'https://www.onlinestorekit.com/support/';
 	$paypal     = 'https://paypal.me/walterpinem';
-	$tools      = function_exists('wpmylinks_url')
-		? wpmylinks_url('https://walterpinem.me/projects/tools/')
+	$tools      = function_exists('wp_mylinks_url')
+		? wp_mylinks_url('https://walterpinem.me/projects/tools/')
 		: 'https://walterpinem.me/projects/tools/';
 	?>
 	<ul>

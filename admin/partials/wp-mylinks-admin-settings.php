@@ -182,12 +182,12 @@ if ( ! function_exists( 'wp_mylinks_sanitize_raw_script' ) ) {
 
 /**
  * Render the "Created with ❤️ and ☕…" credit line shared by Welcome and
- * Support tabs. Wraps the author URL with wpmylinks_url() so it carries the
+ * Support tabs. Wraps the author URL with wp_mylinks_url() so it carries the
  * standard tracking parameters.
  */
 function wp_mylinks_render_credit_line() {
-	$author_url = function_exists( 'wpmylinks_url' )
-		? wpmylinks_url( 'https://walterpinem.me' )
+	$author_url = function_exists( 'wp_mylinks_url' )
+		? wp_mylinks_url( 'https://walterpinem.me' )
 		: esc_url( 'https://walterpinem.me' );
 
 	$message = sprintf(
@@ -1056,11 +1056,11 @@ function wp_mylinks_render_tools_tab() {
  */
 function wp_mylinks_render_support_tab() {
 	// Author / project URLs (tracked — our own properties only).
-	$walterpinem_me_url  = wpmylinks_url( 'https://walterpinem.me/' );
-	$walterpinem_com_url = wpmylinks_url( 'https://walterpinem.com/' );
-	$onlinestorekit_url  = wpmylinks_url( 'https://www.onlinestorekit.com/' );
-	$free_tools_url      = wpmylinks_url( 'https://walterpinem.me/projects/tools/' );
-	$contact_url         = wpmylinks_url( 'https://www.onlinestorekit.com/support/' );
+	$walterpinem_me_url  = wp_mylinks_url( 'https://walterpinem.me/' );
+	$walterpinem_com_url = wp_mylinks_url( 'https://walterpinem.com/' );
+	$onlinestorekit_url  = wp_mylinks_url( 'https://www.onlinestorekit.com/' );
+	$free_tools_url      = wp_mylinks_url( 'https://walterpinem.me/projects/tools/' );
+	$contact_url         = wp_mylinks_url( 'https://www.onlinestorekit.com/support/' );
 
 	// External URLs we don't track (third-party platforms).
 	$video_tutorial_url = 'https://www.youtube.com/watch?v=GwFU4BJPl1I';

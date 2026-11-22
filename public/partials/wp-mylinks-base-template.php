@@ -29,6 +29,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! function_exists( 'wp_mylinks_render_template' ) ) {
+/**
+ * Render the standalone MyLinks page. Wrapped in a function so the template's
+ * working variables stay local instead of leaking into the global scope.
+ *
+ * @since 1.2.0
+ *
+ * @return void
+ */
+function wp_mylinks_render_template() {
 global $post;
 $post_id = (int) get_the_ID();
 
@@ -833,3 +843,8 @@ do_action( 'wp_mylinks_footer', $post_id );
 <?php endif; ?>
 </body>
 </html>
+<?php
+}
+}
+
+wp_mylinks_render_template();

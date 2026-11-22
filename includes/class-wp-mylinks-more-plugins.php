@@ -230,8 +230,8 @@ class Wp_Mylinks_More_Plugins {
 		$is_active = $file && is_plugin_active($file);
 
 		// Own-property pages carry the house tracking parameters.
-		$landing = $plugin['landing'] ? wpmylinks_url($plugin['landing']) : '';
-		$product = $plugin['product'] ? wpmylinks_url($plugin['product']) : '';
+		$landing = $plugin['landing'] ? wp_mylinks_url($plugin['landing']) : '';
+		$product = $plugin['product'] ? wp_mylinks_url($plugin['product']) : '';
 		?>
 		<div class="wml-plugin">
 			<div class="wml-plugin__head">

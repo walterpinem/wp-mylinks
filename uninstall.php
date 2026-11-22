@@ -26,9 +26,9 @@ if ( ! defined('WP_UNINSTALL_PLUGIN') ) {
 
 // --- Honor the user's "Delete Plugin Data on Uninstall?" setting -------------
 
-$delete_data = (string) get_option('wp_mylinks_delete_data_on_uninstall');
+$wp_mylinks_delete_data = (string) get_option('wp_mylinks_delete_data_on_uninstall');
 
-if ( 'yes' !== $delete_data ) {
+if ( 'yes' !== $wp_mylinks_delete_data ) {
 	// User has not opted in to data deletion. Leave everything in place so
 	// reinstalling the plugin restores their settings cleanly.
 	return;
@@ -36,7 +36,7 @@ if ( 'yes' !== $delete_data ) {
 
 // --- Delete plugin options ---------------------------------------------------
 
-$options_to_delete = array(
+$wp_mylinks_options_to_delete = array(
 	'mylinks_theme',
 	'mylinks_meta_title',
 	'mylinks_meta_description',
@@ -70,11 +70,11 @@ $options_to_delete = array(
 	'wp_mylinks_font_family',
 	'wp_mylinks_link_post_types',
 );
-foreach ( $options_to_delete as $opt ) {
-	delete_option($opt);
+foreach ( $wp_mylinks_options_to_delete as $wp_mylinks_opt ) {
+	delete_option($wp_mylinks_opt);
 	// In multisite, also clean network options where applicable.
 	if ( is_multisite() ) {
-		delete_site_option($opt);
+		delete_site_option($wp_mylinks_opt);
 	}
 }
 
@@ -105,10 +105,10 @@ $wpdb->query(
 
 if ( defined('WP_MYLINKS_PURGE_POSTS_ON_UNINSTALL') && WP_MYLINKS_PURGE_POSTS_ON_UNINSTALL ) {
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Bulk post-ID enumeration on uninstall; one-shot.
-	$post_ids = $wpdb->get_col(
+	$wp_mylinks_post_ids = $wpdb->get_col(
 		"SELECT ID FROM {$wpdb->posts} WHERE post_type IN ('mylink', 'mylinks-collection')"
 	);
-	foreach ( (array) $post_ids as $mylinks_post_id ) {
+	foreach ( (array) $wp_mylinks_post_ids as $mylinks_post_id ) {
 		wp_delete_post( (int) $mylinks_post_id, true);
 	}
 }

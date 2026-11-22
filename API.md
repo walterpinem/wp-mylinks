@@ -48,9 +48,11 @@ The pre-escaped Open Graph / Twitter Card `<meta>` lines.
 The internal CPT rewrite slug (default `mylink`). Public URLs are
 slug-stripped either way.
 
-### `wpmylinks_url_params( array $params, string $base_url )`
+### `wp_mylinks_url_params( array $params, string $base_url )`
 
-Campaign parameters appended to the plugin's own outbound links.
+Campaign parameters appended to the plugin's own outbound links. This filter
+was named `wpmylinks_url_params` before 1.2.0; the old name still works but is
+deprecated and logs a notice when a callback is hooked to it.
 
 ## Admin extension surface
 
