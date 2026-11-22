@@ -81,7 +81,7 @@ Put your MyLink URL in every bio and profile, and drive all of that traffic to a
 
 It's really easy to get started. Here's the complete overview and tutorial:
 
-https://www.youtube.com/embed/WK03GS5rM0Q
+https://www.youtube.com/embed/GwFU4BJPl1I
 
 ### Theme Demos
 * [Default](https://walterpinem.me/projects/mylinks/default/ "Default Theme")
@@ -201,6 +201,7 @@ Editor polish release.
 
 * [Improved] The social profile fields now read "X (Twitter) URL" and "X (Twitter) Icon" to match the X icon. Field IDs and saved data are unchanged.
 * [Improved] The per-page and global Meta Description boxes now look like the other text fields instead of the code-editor style.
+* [Improved] The Welcome tab, the admin footer's Video Tutorial link and this page now feature the new WP MyLinks overview video.
 * [Fixed] Text inputs in the editor showed the WordPress admin color scheme's focus ring instead of the plugin's gold one.
 * [Fixed] "YouTube" is now spelled correctly in field labels and help text (it was "Youtube").
 
@@ -399,7 +400,7 @@ Maintenance release: WordPress 7.1 compatibility and housekeeping.
 
 == Upgrade Notice ==
 = 1.1.2 - November 22, 2026 =
-Editor polish: social fields now say "X (Twitter)", "YouTube" is spelled correctly, the Meta Description boxes match the other text fields, and text inputs show the plugin's gold focus ring. No data changes. Safe update for all users.
+Editor polish: social fields now say "X (Twitter)", "YouTube" is spelled correctly, the Meta Description boxes match the other text fields, text inputs show the plugin's gold focus ring, and the Welcome tab plays the new overview video. No data changes. Safe update for all users.
 
 = 1.1.1 - August 25, 2026 =
 Maintenance release: WordPress 7.1 compatibility, a refreshed More Plugins tab, the plugin's own brand menu icon, bundled-library credits, and a small Export button fix. Safe update for all users.

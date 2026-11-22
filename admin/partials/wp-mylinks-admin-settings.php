@@ -554,7 +554,7 @@ function wp_mylinks_render_welcome_tab() {
 
 		<?php wp_mylinks_card_open( 'video-alt3', __( 'Watch the Complete Overview and Tutorial', 'wp-mylinks' ) ); ?>
 			<div class="wml-embed">
-				<iframe src="https://www.youtube.com/embed/?listType=playlist&list=PLwazGJFvaLnCZrBRuDeDsbkpjjOPKz4pC" title="<?php esc_attr_e( 'WP MyLinks Tutorial', 'wp-mylinks' ); ?>" allowfullscreen></iframe>
+				<iframe src="https://www.youtube.com/embed/GwFU4BJPl1I" title="<?php esc_attr_e( 'WP MyLinks Tutorial', 'wp-mylinks' ); ?>" allowfullscreen></iframe>
 			</div>
 		<?php wp_mylinks_card_close(); ?>
 
@@ -1063,7 +1063,7 @@ function wp_mylinks_render_support_tab() {
 	$contact_url         = wpmylinks_url( 'https://www.onlinestorekit.com/support/' );
 
 	// External URLs we don't track (third-party platforms).
-	$video_tutorial_url = 'https://www.youtube.com/watch?v=WK03GS5rM0Q&list=PLwazGJFvaLnCZrBRuDeDsbkpjjOPKz4pC';
+	$video_tutorial_url = 'https://www.youtube.com/watch?v=GwFU4BJPl1I';
 	$review_url         = 'https://wordpress.org/support/plugin/wp-mylinks/reviews/?rate=5#new-post';
 
 	$links = array(
