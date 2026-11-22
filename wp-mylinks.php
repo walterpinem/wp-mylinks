@@ -208,7 +208,17 @@ function wp_mylinks_isYoastActive() { // phpcs:ignore WordPress.NamingConvention
 if ( ! function_exists('wp_mylinks_is_bot_request') ) {
 	function wp_mylinks_is_bot_request() {
 		$ua = isset($_SERVER['HTTP_USER_AGENT']) ? strtolower( sanitize_text_field( wp_unslash($_SERVER['HTTP_USER_AGENT']) ) ) : '';
-		return '' === $ua || (bool) preg_match('/bot|crawl|spider|slurp|curl|wget|python-|headless|lighthouse|pingdom|monitor|preview|facebookexternalhit/', $ua);
+		$is_bot = '' === $ua || (bool) preg_match('/bot|crawl|spider|slurp|curl|wget|python-|headless|lighthouse|pingdom|monitor|preview|facebookexternalhit/', $ua);
+
+		/**
+		 * Filters whether this request is left out of visit and click counts.
+		 * Previews return true so looking at a page never counts as a visit.
+		 *
+		 * @since 1.2.0
+		 *
+		 * @param bool $is_bot True when the request is not counted.
+		 */
+		return (bool) apply_filters( 'wp_mylinks_is_bot_request', $is_bot );
 	}
 }
 
