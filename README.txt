@@ -434,7 +434,7 @@ Maintenance release: WordPress 7.1 compatibility and housekeeping.
 
 == Upgrade Notice ==
 = 1.2.0 - November 23, 2026 =
-New: AI agents can list, read, create and edit your pages over MCP. Off by default, needs WordPress 6.9 and the MCP Adapter plugin, and changes wait for your approval. Also protects page fields from XML-RPC and fixes Live Builder previews counting as visits.
+Security update, recommended for all users: protects page fields from XML-RPC changes. New: AI agents can list, read, create and edit your pages over MCP. Off by default, needs WordPress 6.9 and the MCP Adapter plugin. Also fixes Live Builder previews counting as visits.
 
 = 1.1.2 - November 22, 2026 =
 Editor polish: X (Twitter) labels, YouTube spelling, consistent Meta Description fields, the gold focus ring, and the new overview video on the Welcome tab. No data changes. Safe update for all users.
