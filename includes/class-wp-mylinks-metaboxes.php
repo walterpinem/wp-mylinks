@@ -433,14 +433,14 @@ function wp_mylinks_register_metaboxes() {
 
 	$schema_before_row = sprintf(
 		/* translators: 1: bolded "Enable JSON-LD Schema?" label, 2: bolded link to the global settings page */
-		__('JSON-LD output is only emitted if the global %1$s option is on (%2$s). When Yoast SEO is active and emitting its own schema, WP MyLinks defers to Yoast automatically.', 'wp-mylinks'),
+		__('JSON-LD output is only emitted if the global %1$s option is on (%2$s).', 'wp-mylinks'),
 		'<strong>"' . esc_html__('Enable JSON-LD Schema?', 'wp-mylinks') . '"</strong>',
 		'<a href="' . $global_settings_url . '" target="_blank" rel="noopener"><strong>' . esc_html__('Settings → MyLinks → Global', 'wp-mylinks') . '</strong></a>'
 	);
 
 	$og_before_row = sprintf(
 		/* translators: 1: bolded "Enable Open Graph & Twitter Card?" label, 2: bolded link to the global settings page */
-		__('Open Graph and Twitter Card output is only emitted if the global %1$s option is on (%2$s). When Yoast SEO is active and handling Open Graph, WP MyLinks defers to Yoast automatically.', 'wp-mylinks'),
+		__('Open Graph and Twitter Card output is only emitted if the global %1$s option is on (%2$s).', 'wp-mylinks'),
 		'<strong>"' . esc_html__('Enable Open Graph & Twitter Card?', 'wp-mylinks') . '"</strong>',
 		'<a href="' . $global_settings_url . '" target="_blank" rel="noopener"><strong>' . esc_html__('Settings → MyLinks → Global', 'wp-mylinks') . '</strong></a>'
 	);
@@ -459,7 +459,7 @@ function wp_mylinks_register_metaboxes() {
 					'id'         => mylinks_prefix('meta-title'),
 					'type'       => 'text',
 					'classes'    => 'wml-field--wide',
-					'before_row' => __('If you use Yoast SEO, you can set the meta tags on Yoast SEO\'s meta box. Or you can also set global meta tags on<br> <a href="edit.php?post_type=mylink&page=welcome&tab=global" target="_blank"><strong>Global Configurations</strong></a>. You can also set custom favicon independently for this MyLinks page.', 'wp-mylinks'),
+					'before_row' => __('These values are used first, even when Yoast SEO is active. Leave a field empty to use this page\'s Yoast SEO value, then the global meta tags on<br> <a href="edit.php?post_type=mylink&page=welcome&tab=global" target="_blank"><strong>Global Configurations</strong></a>. You can also set custom favicon independently for this MyLinks page.', 'wp-mylinks'),
 					'attributes' => array(
 						'class' => 'mylinks-input-text',
 					),

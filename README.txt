@@ -42,7 +42,7 @@ Put your MyLink URL in every bio and profile, and drive all of that traffic to a
 *   **[New in 1.1.0]**: **Crisp SVG social icons**. The 8 default social icons are now scalable brand-colored SVGs that look sharp on every screen and every theme. Your custom uploaded icons keep working unchanged.
 *   **[New in 1.1.0]**: **Pick your Link URL sources**. Choose which post types the Link URL search pulls from, Posts, Pages, and WooCommerce Products by default, and it searches your whole site so any of them is one click away. Link Collections are always included.
 *   **[New in 1.1.0]**: **Lighter and faster**. The bundled CMB2 framework has been replaced by the plugin's own fields system, the download shrank from 4.3 MB to under 1 MB, with zero migration and no data changes.
-*   **[New in 1.0.8]**: **Schema.org JSON-LD output**. Pick `Person` or `Organization` schema globally or per page so search engines can identify you. Defers to Yoast SEO automatically when Yoast is handling schema.
+*   **[New in 1.0.8]**: **Schema.org JSON-LD output**. Pick `Person` or `Organization` schema globally or per page so search engines can identify you.
 *   **[New in 1.0.8]**: **Open Graph & Twitter Card meta tags**. Share previews on Facebook, X (Twitter), LinkedIn, and Discord now look correct. Configure a default 1200×630 share image globally, or override it per page.
 *   **[New in 1.0.8]**: **Additional Social Platforms metabox**. Add Threads, Bluesky, GitHub, Mastodon, WhatsApp, Telegram, Signal, or any other platform via a flexible repeater, alongside the existing 8 hardcoded platforms.
 *   **[New in 1.0.8]**: **WCAG 2.2 accessibility**. Skip-to-content link, ARIA labels on every social icon and link button, "opens in new tab" hints for screen readers, and graceful avatar alt fallbacks.
@@ -167,7 +167,7 @@ Yes. Use the `wp_mylinks_cpt_rewrite_slug` filter to override the slug. Public U
 `add_filter( 'wp_mylinks_cpt_rewrite_slug', function() { return 'bio'; } );`
 
 = Does WP MyLinks work with Yoast SEO? =
-Yes. Yoast remains the source of truth on any page where it has set its own meta title, description, Open Graph image, or schema. WP MyLinks detects Yoast at runtime and steps aside automatically, no double tags. If Yoast is installed but you've disabled its Open Graph or schema features, WP MyLinks will fill the gap.
+Yes. Each MyLinks page uses its own Setup Meta Tags values first. If a field there is empty, it uses that page's Yoast SEO value, with Yoast variables filled in, and then your global settings. Yoast does not print tags on MyLinks pages, so turn on the Open Graph and Schema options in the MyLinks settings if you want them. You will not get duplicate tags.
 
 = Will the new Schema.org and Open Graph features change anything if I don't enable them? =
 No. Both features are off by default. Existing 1.0.7 installs upgrade silently and continue rendering exactly as before. Enable them on Settings → MyLinks → Global only when you're ready.
@@ -226,6 +226,7 @@ AI agents release.
 * [New] **Review and undo**. Agent changes are logged, with Undo on each page. Proposals have a preview, Approve and Discard.
 * [Security] MyLinks page fields, including custom page scripts, are now protected, so they can no longer be read or changed as generic custom fields over XML-RPC.
 * [Improved] Media embeds: a failed embed is remembered for 15 minutes and one page view looks up at most 10 new embeds, so dead embed links cannot hold up the page.
+* [Fixed] **Yoast SEO meta tags**. With Yoast active, the Setup Meta Tags box and global meta settings were ignored, Yoast variables could print as plain text, and Open Graph and schema tags were missing. Each page now uses its own box first, then its Yoast values, then the global settings.
 * [Fixed] Live Builder preview reloads no longer count as page visits.
 * [Misc] Plugin Check cleanup. The `wpmylinks_url_params` filter is now `wp_mylinks_url_params`, and the old name still works but is deprecated. The helper `wpmylinks_url()` is now `wp_mylinks_url()`.
 
@@ -434,7 +435,7 @@ Maintenance release: WordPress 7.1 compatibility and housekeeping.
 
 == Upgrade Notice ==
 = 1.2.0 - November 23, 2026 =
-Security update, recommended for all users: protects page fields from XML-RPC changes. New: AI agents can list, read, create and edit your pages over MCP. Off by default, needs WordPress 6.9 and the MCP Adapter plugin. Also fixes Live Builder previews counting as visits.
+Security update, recommended for all users: protects page fields from XML-RPC changes. New: AI agents can list, read, create and edit your pages over MCP. Off by default, needs WordPress 6.9 and the MCP Adapter plugin. Also fixes meta tags when Yoast SEO is active.
 
 = 1.1.2 - November 22, 2026 =
 Editor polish: X (Twitter) labels, YouTube spelling, consistent Meta Description fields, the gold focus ring, and the new overview video on the Welcome tab. No data changes. Safe update for all users.

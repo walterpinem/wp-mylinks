@@ -1243,57 +1243,6 @@ if ( ! function_exists('wp_mylinks_resolve_meta_or_option') ) {
 }
 
 /**
- * Detect whether Yoast SEO is currently emitting Open Graph tags for this
- * site. Used so we don't double-emit when Yoast is active.
- *
- * Yoast stores its OG toggle in the 'wpseo_social' option under the
- * 'opengraph' key. If Yoast is active and that toggle is on, we step aside.
- *
- * @since 1.0.8
- *
- * @return bool
- */
-if ( ! function_exists('wp_mylinks_yoast_handles_og') ) {
-	function wp_mylinks_yoast_handles_og() {
-		if ( ! function_exists('wp_mylinks_isYoastActive') || ! wp_mylinks_isYoastActive() ) {
-			return false;
-		}
-		$social = get_option('wpseo_social');
-		if ( ! is_array($social) ) {
-			return false;
-		}
-		return ! empty($social['opengraph']);
-	}
-}
-
-/**
- * Detect whether Yoast SEO is currently emitting Schema.org JSON-LD.
- *
- * Yoast's schema output is on by default and toggled via the 'wpseo' option
- * under 'enable_index_now' / 'breadcrumbs-enable' style keys; the practical
- * way to check is via the wpseo_json_ld_output filter Yoast itself respects.
- *
- * Conservative behavior: if Yoast is active, assume it handles JSON-LD
- * unless it is explicitly disabled in Yoast's settings.
- *
- * @since 1.0.8
- *
- * @return bool
- */
-if ( ! function_exists('wp_mylinks_yoast_handles_schema') ) {
-	function wp_mylinks_yoast_handles_schema() {
-		if ( ! function_exists('wp_mylinks_isYoastActive') || ! wp_mylinks_isYoastActive() ) {
-			return false;
-		}
-		// Yoast 14+ outputs schema by default. Allow site owners to opt out
-		// via the standard wpseo_json_ld_output filter (returns false to
-		// disable). We mirror that contract.
-		$enabled = apply_filters('wpseo_json_ld_output', '', ''); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Yoast SEO's own filter.
-		return false !== $enabled;
-	}
-}
-
-/**
  * Build the array of social URLs (hardcoded 8 + additional repeater) for the
  * given post. Used to populate Schema.org `sameAs` and to render the social
  * row in the public template.

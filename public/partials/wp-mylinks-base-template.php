@@ -266,13 +266,23 @@ $wp_mylinks_build_socials = static function ( $indent = '    ', $post_id = 0 ) {
 
 $yoast_seo_active = function_exists( 'wp_mylinks_isYoastActive' ) && wp_mylinks_isYoastActive();
 
-if ( $yoast_seo_active ) {
-	$meta_title       = $post_id ? (string) get_post_meta( $post_id, '_yoast_wpseo_title', true ) : '';
-	$meta_description = $post_id ? (string) get_post_meta( $post_id, '_yoast_wpseo_metadesc', true ) : '';
-} else {
-	$meta_title       = $wp_mylinks_resolve( mylinks_prefix( 'meta-title' ), 'mylinks_meta_title', '' );
-	$meta_description = $wp_mylinks_resolve( mylinks_prefix( 'meta-description' ), 'mylinks_meta_description', '' );
-}
+/**
+ * One SEO value: this page's Setup Meta Tags box, then this page's Yoast value
+ * with its variables replaced, then the global setting.
+ */
+$wp_mylinks_seo_value = static function ( $field, $yoast_key, $option_key ) use ( $post_id, $yoast_seo_active ) {
+	$value = $post_id ? trim( (string) get_post_meta( $post_id, mylinks_prefix( $field ), true ) ) : '';
+	if ( '' === $value && $post_id && $yoast_seo_active ) {
+		$value = trim( (string) get_post_meta( $post_id, $yoast_key, true ) );
+		if ( '' !== $value && function_exists( 'wpseo_replace_vars' ) ) {
+			$value = trim( (string) wpseo_replace_vars( $value, get_post( $post_id ) ) );
+		}
+	}
+	return '' !== $value ? $value : trim( (string) get_option( $option_key, '' ) );
+};
+
+$meta_title       = $wp_mylinks_seo_value( 'meta-title', '_yoast_wpseo_title', 'mylinks_meta_title' );
+$meta_description = $wp_mylinks_seo_value( 'meta-description', '_yoast_wpseo_metadesc', 'mylinks_meta_description' );
 if ( '' === $meta_title ) {
 	$meta_title = (string) get_the_title();
 }
@@ -371,9 +381,9 @@ $inline_css_block = implode( "\n", array_filter( $inline_css_chunks ) );
 // -----------------------------------------------------------------------------
 // SEO output: Schema.org JSON-LD, Open Graph, Twitter Card (1.0.8+)
 //
-// All output is gated on the global enable toggle AND defers to Yoast SEO when
-// Yoast is active and emitting the same kind of output. New options default
-// to off so existing 1.0.7 installs upgrade silently.
+// All output is gated on the global enable toggle. This template runs without
+// wp_head(), so Yoast SEO prints nothing here and cannot duplicate these tags.
+// New options default to off so existing 1.0.7 installs upgrade silently.
 // -----------------------------------------------------------------------------
 
 $schema_script_tag = '';
@@ -381,8 +391,7 @@ $og_meta_block     = '';
 
 // 1) Schema.org JSON-LD.
 if ( 'yes' === get_option( 'wp_mylinks_enable_schema' ) ) {
-	$skip_schema = function_exists( 'wp_mylinks_yoast_handles_schema' ) && wp_mylinks_yoast_handles_schema();
-	if ( ! $skip_schema && function_exists( 'wp_mylinks_build_schema_json' ) ) {
+	if ( function_exists( 'wp_mylinks_build_schema_json' ) ) {
 		$schema_json = wp_mylinks_build_schema_json( $post_id );
 		if ( is_string( $schema_json ) && '' !== $schema_json ) {
 			$schema_script_tag = '  <script type="application/ld+json">' . "\n"
@@ -394,73 +403,70 @@ if ( 'yes' === get_option( 'wp_mylinks_enable_schema' ) ) {
 
 // 2) Open Graph + Twitter Card meta tags.
 if ( 'yes' === get_option( 'wp_mylinks_enable_og' ) ) {
-	$skip_og = function_exists( 'wp_mylinks_yoast_handles_og' ) && wp_mylinks_yoast_handles_og();
-	if ( ! $skip_og ) {
-		$og_lines = array();
+	$og_lines = array();
 
-		$og_title  = '' !== $meta_title ? $meta_title : (string) get_the_title();
-		$og_desc   = $meta_description;
-		$og_url    = $post_id > 0 ? (string) get_permalink( $post_id ) : '';
-		$og_image  = function_exists( 'wp_mylinks_resolve_og_image' )
-			? wp_mylinks_resolve_og_image( $post_id )
-			: '';
-		$site_name = (string) get_bloginfo( 'name' );
+	$og_title  = '' !== $meta_title ? $meta_title : (string) get_the_title();
+	$og_desc   = $meta_description;
+	$og_url    = $post_id > 0 ? (string) get_permalink( $post_id ) : '';
+	$og_image  = function_exists( 'wp_mylinks_resolve_og_image' )
+		? wp_mylinks_resolve_og_image( $post_id )
+		: '';
+	$site_name = (string) get_bloginfo( 'name' );
 
-		// Schema → og:type. Person / Organization → 'profile' is technically
-		// the most accurate type per OGP spec, but Facebook actually expects
-		// 'website' for bio-style pages and renders them better. Stick with
-		// 'website' for the default OGP type; site owners can override via
-		// the wp_mylinks_og_meta filter below.
-		$og_type = 'website';
+	// Schema → og:type. Person / Organization → 'profile' is technically
+	// the most accurate type per OGP spec, but Facebook actually expects
+	// 'website' for bio-style pages and renders them better. Stick with
+	// 'website' for the default OGP type; site owners can override via
+	// the wp_mylinks_og_meta filter below.
+	$og_type = 'website';
 
-		$og_lines[] = sprintf( '  <meta property="og:type" content="%s">', esc_attr( $og_type ) );
-		$og_lines[] = sprintf( '  <meta property="og:title" content="%s">', esc_attr( $og_title ) );
-		if ( '' !== $og_desc ) {
-			$og_lines[] = sprintf( '  <meta property="og:description" content="%s">', esc_attr( $og_desc ) );
-		}
-		if ( '' !== $og_url ) {
-			$og_lines[] = sprintf( '  <meta property="og:url" content="%s">', esc_url( $og_url ) );
-		}
-		if ( '' !== $site_name ) {
-			$og_lines[] = sprintf( '  <meta property="og:site_name" content="%s">', esc_attr( $site_name ) );
-		}
-		if ( '' !== $og_image ) {
-			$og_lines[] = sprintf( '  <meta property="og:image" content="%s">', esc_url( $og_image ) );
-			$og_lines[] = '  <meta property="og:image:width" content="1200">';
-			$og_lines[] = '  <meta property="og:image:height" content="630">';
-		}
+	$og_lines[] = sprintf( '  <meta property="og:type" content="%s">', esc_attr( $og_type ) );
+	$og_lines[] = sprintf( '  <meta property="og:title" content="%s">', esc_attr( $og_title ) );
+	if ( '' !== $og_desc ) {
+		$og_lines[] = sprintf( '  <meta property="og:description" content="%s">', esc_attr( $og_desc ) );
+	}
+	if ( '' !== $og_url ) {
+		$og_lines[] = sprintf( '  <meta property="og:url" content="%s">', esc_url( $og_url ) );
+	}
+	if ( '' !== $site_name ) {
+		$og_lines[] = sprintf( '  <meta property="og:site_name" content="%s">', esc_attr( $site_name ) );
+	}
+	if ( '' !== $og_image ) {
+		$og_lines[] = sprintf( '  <meta property="og:image" content="%s">', esc_url( $og_image ) );
+		$og_lines[] = '  <meta property="og:image:width" content="1200">';
+		$og_lines[] = '  <meta property="og:image:height" content="630">';
+	}
 
-		// Twitter Card.
-		$twitter_card_type = '' !== $og_image ? 'summary_large_image' : 'summary';
-		$og_lines[]        = sprintf( '  <meta name="twitter:card" content="%s">', esc_attr( $twitter_card_type ) );
-		$og_lines[]        = sprintf( '  <meta name="twitter:title" content="%s">', esc_attr( $og_title ) );
-		if ( '' !== $og_desc ) {
-			$og_lines[] = sprintf( '  <meta name="twitter:description" content="%s">', esc_attr( $og_desc ) );
-		}
-		if ( '' !== $og_image ) {
-			$og_lines[] = sprintf( '  <meta name="twitter:image" content="%s">', esc_url( $og_image ) );
-		}
+	// Twitter Card.
+	$twitter_card_type = '' !== $og_image ? 'summary_large_image' : 'summary';
+	$og_lines[]        = sprintf( '  <meta name="twitter:card" content="%s">', esc_attr( $twitter_card_type ) );
+	$og_lines[]        = sprintf( '  <meta name="twitter:title" content="%s">', esc_attr( $og_title ) );
+	if ( '' !== $og_desc ) {
+		$og_lines[] = sprintf( '  <meta name="twitter:description" content="%s">', esc_attr( $og_desc ) );
+	}
+	if ( '' !== $og_image ) {
+		$og_lines[] = sprintf( '  <meta name="twitter:image" content="%s">', esc_url( $og_image ) );
+	}
 
-		$twitter_handle = (string) get_option( 'wp_mylinks_twitter_handle', '' );
-		if ( '' !== $twitter_handle ) {
-			$og_lines[] = sprintf( '  <meta name="twitter:site" content="%s">', esc_attr( $twitter_handle ) );
-			$og_lines[] = sprintf( '  <meta name="twitter:creator" content="%s">', esc_attr( $twitter_handle ) );
-		}
+	$twitter_handle = (string) get_option( 'wp_mylinks_twitter_handle', '' );
+	if ( '' !== $twitter_handle ) {
+		$og_lines[] = sprintf( '  <meta name="twitter:site" content="%s">', esc_attr( $twitter_handle ) );
+		$og_lines[] = sprintf( '  <meta name="twitter:creator" content="%s">', esc_attr( $twitter_handle ) );
+	}
 
-		/**
-		 * Filter the OG/Twitter meta tag lines before they are joined and
-		 * emitted. Each entry is a complete `<meta ...>` line, already escaped.
-		 *
-		 * @since 1.0.8
-		 *
-		 * @param string[] $og_lines Array of meta-tag HTML lines.
-		 * @param int      $post_id  Current MyLink post ID.
-		 */
-		$og_lines = apply_filters( 'wp_mylinks_og_meta', $og_lines, $post_id );
+	/**
+	 * Filter the OG/Twitter meta tag lines before they are joined and
+	 * emitted. Each entry is a complete `<meta ...>` line, already escaped.
+	 *
+	 * @since 1.0.8
+	 *
+	 * @param string[] $og_lines Array of meta-tag HTML lines.
+	 * @param int      $post_id  Current MyLink post ID.
+	 */
+	$og_lines = apply_filters( 'wp_mylinks_og_meta', $og_lines, $post_id );
 
-		if ( ! empty( $og_lines ) && is_array( $og_lines ) ) {
-			$og_meta_block = implode( "\n", array_filter( array_map( 'strval', $og_lines ) ) );
-		}
+	if ( ! empty( $og_lines ) && is_array( $og_lines ) ) {
+		$og_meta_block = implode( "\n", array_filter( array_map( 'strval', $og_lines ) ) );
 	}
 }
 

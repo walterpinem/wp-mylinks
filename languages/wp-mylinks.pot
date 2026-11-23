@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-23T04:42:59+00:00\n"
+"POT-Creation-Date: 2026-11-23T05:51:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-mylinks\n"
@@ -549,7 +549,7 @@ msgid "Meta Tags"
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-settings.php:682
-msgid "Shown on search engine results and the browser tab. If you use Yoast SEO or the per-page <strong>Setup Meta Tags</strong> form and already set both the <code>meta title</code> and <code>description</code> on a MyLink, those win over these values."
+msgid "Shown on search engine results and the browser tab. A page's own <strong>Setup Meta Tags</strong> values come first, then its Yoast SEO values if Yoast is active, then these."
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-settings.php:686
@@ -603,7 +603,7 @@ msgid "Schema.org Structured Data"
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-settings.php:719
-msgid "Output <code>Person</code> or <code>Organization</code> JSON-LD in the <code>&lt;head&gt;</code> of every MyLinks page so search engines can identify you. If Yoast SEO is active and emitting its own schema, this defers to Yoast automatically. You can override the type per page on the MyLink editor."
+msgid "Output <code>Person</code> or <code>Organization</code> JSON-LD in the <code>&lt;head&gt;</code> of every MyLinks page so search engines can identify you. You can override the type per page on the MyLink editor."
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-settings.php:723
@@ -644,7 +644,7 @@ msgid "Open Graph & Twitter Card"
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-settings.php:747
-msgid "Output <code>og:*</code> and <code>twitter:*</code> meta tags so social-media share previews look correct. If Yoast SEO is active and handling Open Graph itself, this defers to Yoast automatically. You can override the share image per page on the MyLink editor."
+msgid "Output <code>og:*</code> and <code>twitter:*</code> meta tags so social-media share previews look correct. You can override the share image per page on the MyLink editor."
 msgstr ""
 
 #: admin/partials/wp-mylinks-admin-settings.php:751
@@ -1837,7 +1837,7 @@ msgstr ""
 #. translators: 1: bolded "Enable JSON-LD Schema?" label, 2: bolded link to the global settings page
 #: includes/class-wp-mylinks-metaboxes.php:436
 #, php-format
-msgid "JSON-LD output is only emitted if the global %1$s option is on (%2$s). When Yoast SEO is active and emitting its own schema, WP MyLinks defers to Yoast automatically."
+msgid "JSON-LD output is only emitted if the global %1$s option is on (%2$s)."
 msgstr ""
 
 #: includes/class-wp-mylinks-metaboxes.php:437
@@ -1852,7 +1852,7 @@ msgstr ""
 #. translators: 1: bolded "Enable Open Graph & Twitter Card?" label, 2: bolded link to the global settings page
 #: includes/class-wp-mylinks-metaboxes.php:443
 #, php-format
-msgid "Open Graph and Twitter Card output is only emitted if the global %1$s option is on (%2$s). When Yoast SEO is active and handling Open Graph, WP MyLinks defers to Yoast automatically."
+msgid "Open Graph and Twitter Card output is only emitted if the global %1$s option is on (%2$s)."
 msgstr ""
 
 #: includes/class-wp-mylinks-metaboxes.php:444
@@ -1868,7 +1868,7 @@ msgid "Set the meta title for this page."
 msgstr ""
 
 #: includes/class-wp-mylinks-metaboxes.php:462
-msgid "If you use Yoast SEO, you can set the meta tags on Yoast SEO's meta box. Or you can also set global meta tags on<br> <a href=\"edit.php?post_type=mylink&page=welcome&tab=global\" target=\"_blank\"><strong>Global Configurations</strong></a>. You can also set custom favicon independently for this MyLinks page."
+msgid "These values are used first, even when Yoast SEO is active. Leave a field empty to use this page's Yoast SEO value, then the global meta tags on<br> <a href=\"edit.php?post_type=mylink&page=welcome&tab=global\" target=\"_blank\"><strong>Global Configurations</strong></a>. You can also set custom favicon independently for this MyLinks page."
 msgstr ""
 
 #: includes/class-wp-mylinks-metaboxes.php:469
@@ -2296,45 +2296,45 @@ msgstr ""
 msgid "Visit our %s profile (opens in a new tab)"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:513
+#: public/partials/wp-mylinks-base-template.php:519
 msgid "Skip to content"
 msgstr ""
 
 #. translators: %s: the reason the embed failed.
-#: public/partials/wp-mylinks-base-template.php:636
+#: public/partials/wp-mylinks-base-template.php:642
 #, php-format
 msgid "Unable to embed the content. Reason: %s"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:640
+#: public/partials/wp-mylinks-base-template.php:646
 msgid "Unable to embed the content."
 msgstr ""
 
 #. translators: %s: link title
-#: public/partials/wp-mylinks-base-template.php:651
-#: public/partials/wp-mylinks-base-template.php:671
-#: public/partials/wp-mylinks-base-template.php:685
+#: public/partials/wp-mylinks-base-template.php:657
+#: public/partials/wp-mylinks-base-template.php:677
+#: public/partials/wp-mylinks-base-template.php:691
 #, php-format
 msgid "%s (opens in a new tab)"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:730
+#: public/partials/wp-mylinks-base-template.php:736
 msgid "Profile picture"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:761
+#: public/partials/wp-mylinks-base-template.php:767
 msgid "Search links"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:762
+#: public/partials/wp-mylinks-base-template.php:768
 msgid "Search links…"
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:763
+#: public/partials/wp-mylinks-base-template.php:769
 msgid "No links match your search."
 msgstr ""
 
-#: public/partials/wp-mylinks-base-template.php:801
+#: public/partials/wp-mylinks-base-template.php:807
 msgid "Made with ❤️ and ☕ by <a href=\"https://walterpinem.me/\" target=\"_blank\" rel=\"noopener nofollow\"><strong>Walter Pinem</strong></a>"
 msgstr ""
 
@@ -2414,6 +2414,6 @@ msgstr ""
 msgid "Klepon Viral"
 msgstr ""
 
-#: wp-mylinks.php:1559
+#: wp-mylinks.php:1508
 msgid "Home"
 msgstr ""

@@ -679,7 +679,7 @@ function wp_mylinks_render_global_tab() {
 			wp_mylinks_card_open(
 				'search',
 				__( 'Meta Tags', 'wp-mylinks' ),
-				__( 'Shown on search engine results and the browser tab. If you use Yoast SEO or the per-page <strong>Setup Meta Tags</strong> form and already set both the <code>meta title</code> and <code>description</code> on a MyLink, those win over these values.', 'wp-mylinks' )
+				__( 'Shown on search engine results and the browser tab. A page\'s own <strong>Setup Meta Tags</strong> values come first, then its Yoast SEO values if Yoast is active, then these.', 'wp-mylinks' )
 			);
 			?>
 			<div class="wml-field">
@@ -716,7 +716,7 @@ function wp_mylinks_render_global_tab() {
 			wp_mylinks_card_open(
 				'media-code',
 				__( 'Schema.org Structured Data', 'wp-mylinks' ),
-				__( 'Output <code>Person</code> or <code>Organization</code> JSON-LD in the <code>&lt;head&gt;</code> of every MyLinks page so search engines can identify you. If Yoast SEO is active and emitting its own schema, this defers to Yoast automatically. You can override the type per page on the MyLink editor.', 'wp-mylinks' )
+				__( 'Output <code>Person</code> or <code>Organization</code> JSON-LD in the <code>&lt;head&gt;</code> of every MyLinks page so search engines can identify you. You can override the type per page on the MyLink editor.', 'wp-mylinks' )
 			);
 			wp_mylinks_toggle_row(
 				'wp_mylinks_enable_schema',
@@ -744,7 +744,7 @@ function wp_mylinks_render_global_tab() {
 			wp_mylinks_card_open(
 				'share',
 				__( 'Open Graph & Twitter Card', 'wp-mylinks' ),
-				__( 'Output <code>og:*</code> and <code>twitter:*</code> meta tags so social-media share previews look correct. If Yoast SEO is active and handling Open Graph itself, this defers to Yoast automatically. You can override the share image per page on the MyLink editor.', 'wp-mylinks' )
+				__( 'Output <code>og:*</code> and <code>twitter:*</code> meta tags so social-media share previews look correct. You can override the share image per page on the MyLink editor.', 'wp-mylinks' )
 			);
 			wp_mylinks_toggle_row(
 				'wp_mylinks_enable_og',
