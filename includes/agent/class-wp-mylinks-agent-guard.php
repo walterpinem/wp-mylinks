@@ -36,6 +36,7 @@ final class Wp_Mylinks_Agent_Guard {
 	 */
 	public static function register() {
 		add_filter( 'is_protected_meta', array( __CLASS__, 'protect_meta' ), 10, 3 );
+		add_filter( 'wp_import_post_meta', array( __CLASS__, 'clean_import' ) );
 		add_action( 'application_password_did_authenticate', array( __CLASS__, 'note_app_password' ) );
 		add_filter( 'rest_request_before_callbacks', array( __CLASS__, 'guard_rest' ), 10, 3 );
 		add_filter( 'wp_insert_post_empty_content', array( __CLASS__, 'guard_xmlrpc_write' ), 10, 2 );
@@ -66,6 +67,27 @@ final class Wp_Mylinks_Agent_Guard {
 	 */
 	public static function note_app_password() {
 		self::$app_password = true;
+	}
+
+	/**
+	 * The WordPress importer writes meta directly, around every other check. An
+	 * importer without unfiltered_html must not bring raw markup into MyLinks fields.
+	 *
+	 * @param mixed $postmeta Importer meta rows.
+	 * @return mixed
+	 */
+	public static function clean_import( $postmeta ) {
+		if ( ! is_array( $postmeta ) || current_user_can( 'unfiltered_html' ) ) {
+			return $postmeta;
+		}
+		foreach ( $postmeta as $index => $row ) {
+			if ( is_array( $row ) && isset( $row['key'], $row['value'] ) && self::protect_meta( false, $row['key'], 'post' ) ) {
+				$value = is_string( $row['value'] ) && is_serialized( $row['value'] ) ? @unserialize( trim( $row['value'] ), array( 'allowed_classes' => false ) ) : $row['value']; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged,WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- No objects allowed, same data the importer reads.
+
+				$postmeta[ $index ]['value'] = wp_kses_post_deep( $value );
+			}
+		}
+		return $postmeta;
 	}
 
 	/**

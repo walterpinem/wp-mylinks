@@ -71,7 +71,8 @@ final class Wp_Mylinks_Seo {
 	}
 
 	/**
-	 * Canonical URL: the SEO plugin's page value, else the permalink.
+	 * Canonical URL: the SEO plugin's page value, the home URL for a MyLink set
+	 * as the front page, else the permalink.
 	 *
 	 * @param int $post_id Page ID.
 	 * @return string
@@ -79,7 +80,13 @@ final class Wp_Mylinks_Seo {
 	public static function canonical( $post_id ) {
 		$custom = esc_url_raw( self::from_plugins( $post_id, 'canonical' ), array( 'http', 'https' ) );
 
-		return '' !== $custom ? $custom : (string) get_permalink( $post_id );
+		if ( '' !== $custom ) {
+			return $custom;
+		}
+		if ( 'page' === get_option( 'show_on_front' ) && (int) get_option( 'page_on_front' ) === (int) $post_id ) {
+			return home_url( '/' );
+		}
+		return (string) get_permalink( $post_id );
 	}
 
 	/**
@@ -113,21 +120,20 @@ final class Wp_Mylinks_Seo {
 	 */
 	public static function noindex_ids() {
 		if ( null === self::$noindex ) {
-			$ids = get_posts(
+			$posts = get_posts(
 				array(
-					'post_type'     => 'mylink',
-					'post_status'   => 'publish',
-					'fields'        => 'ids',
-					'numberposts'   => -1,
-					'no_found_rows' => true,
+					'post_type'              => 'mylink',
+					'post_status'            => 'publish',
+					'numberposts'            => -1,
+					'no_found_rows'          => true,
+					'update_post_term_cache' => false,
 				)
 			);
-			update_meta_cache( 'post', $ids );
 
 			self::$noindex = array();
-			foreach ( $ids as $id ) {
-				if ( '' !== (string) get_post_field( 'post_password', $id ) || self::flag( (int) $id, 'noindex', 'wp_mylinks_noindex' ) ) {
-					self::$noindex[] = (int) $id;
+			foreach ( $posts as $post ) {
+				if ( '' !== (string) $post->post_password || self::flag( (int) $post->ID, 'noindex', 'wp_mylinks_noindex' ) ) {
+					self::$noindex[] = (int) $post->ID;
 				}
 			}
 		}
@@ -154,7 +160,7 @@ final class Wp_Mylinks_Seo {
 	 */
 	public static function exclude_from_core( $args, $post_type ) {
 		if ( 'mylink' === $post_type ) {
-			$args['post__not_in'] = self::exclude_ids( isset( $args['post__not_in'] ) ? $args['post__not_in'] : array() );
+			$args['post__not_in'] = self::exclude_ids( isset( $args['post__not_in'] ) ? $args['post__not_in'] : array() ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Sitemap query for this post type only, with a short list.
 		}
 		return $args;
 	}
@@ -167,7 +173,7 @@ final class Wp_Mylinks_Seo {
 	 */
 	public static function exclude_from_query( $args ) {
 		if ( is_array( $args ) && isset( $args['post_type'] ) && in_array( 'mylink', (array) $args['post_type'], true ) ) {
-			$args['post__not_in'] = self::exclude_ids( isset( $args['post__not_in'] ) ? $args['post__not_in'] : array() );
+			$args['post__not_in'] = self::exclude_ids( isset( $args['post__not_in'] ) ? $args['post__not_in'] : array() ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Sitemap query for this post type only, with a short list.
 		}
 		return $args;
 	}
@@ -219,7 +225,7 @@ final class Wp_Mylinks_Seo {
 			return 'yes' === $choice;
 		}
 		if ( $post_id ) {
-			foreach ( self::plugin_values( $post_id ) as $values ) {
+			foreach ( self::plugin_values( $post_id, false ) as $values ) {
 				if ( ! empty( $values[ $field ] ) ) {
 					return true;
 				}
@@ -249,13 +255,17 @@ final class Wp_Mylinks_Seo {
 	 * What each active SEO plugin saved for this page. A failure in another
 	 * plugin must never take the page down, so it only skips that plugin.
 	 *
-	 * @param int $post_id Page ID.
+	 * @param int  $post_id   Page ID.
+	 * @param bool $with_text False skips variable replacement, for robots-only reads.
 	 * @return array[]
 	 */
-	private static function plugin_values( $post_id ) {
+	private static function plugin_values( $post_id, $with_text = true ) {
 		$post_id = (int) $post_id;
-		if ( isset( self::$values[ $post_id ] ) ) {
-			return self::$values[ $post_id ];
+		if ( isset( self::$values[ $post_id ]['full'] ) ) {
+			return self::$values[ $post_id ]['full'];
+		}
+		if ( ! $with_text && isset( self::$values[ $post_id ]['robots'] ) ) {
+			return self::$values[ $post_id ]['robots'];
 		}
 
 		$post    = get_post( $post_id );
@@ -271,25 +281,29 @@ final class Wp_Mylinks_Seo {
 		if ( $post instanceof WP_Post ) {
 			foreach ( array_keys( array_filter( $readers ) ) as $reader ) {
 				try {
-					$results[] = self::$reader( $post );
+					$results[] = self::$reader( $post, $with_text );
 				} catch ( \Throwable $e ) {
 					continue;
 				}
 			}
 		}
 
-		self::$values[ $post_id ] = $results;
+		self::$values[ $post_id ][ $with_text ? 'full' : 'robots' ] = $results;
 		return $results;
 	}
 
 	/**
 	 * Yoast SEO.
 	 *
-	 * @param WP_Post $post Page.
+	 * @param WP_Post $post      Page.
+	 * @param bool    $with_text Replace variables in title and description.
 	 * @return array
 	 */
-	private static function yoast( WP_Post $post ) {
-		$vars = static function ( $text ) use ( $post ) {
+	private static function yoast( WP_Post $post, $with_text ) {
+		$vars = static function ( $text ) use ( $post, $with_text ) {
+			if ( ! $with_text ) {
+				return '';
+			}
 			return '' !== $text && function_exists( 'wpseo_replace_vars' ) ? wpseo_replace_vars( $text, $post ) : $text;
 		};
 
@@ -306,11 +320,15 @@ final class Wp_Mylinks_Seo {
 	/**
 	 * Rank Math.
 	 *
-	 * @param WP_Post $post Page.
+	 * @param WP_Post $post      Page.
+	 * @param bool    $with_text Replace variables in title and description.
 	 * @return array
 	 */
-	private static function rank_math( WP_Post $post ) {
-		$vars   = static function ( $text ) use ( $post ) {
+	private static function rank_math( WP_Post $post, $with_text ) {
+		$vars   = static function ( $text ) use ( $post, $with_text ) {
+			if ( ! $with_text ) {
+				return '';
+			}
 			return '' !== $text ? \RankMath\Helper::replace_vars( $text, $post ) : $text;
 		};
 		$robots = (array) get_post_meta( $post->ID, 'rank_math_robots', true );
@@ -328,12 +346,16 @@ final class Wp_Mylinks_Seo {
 	/**
 	 * All in One SEO, which keeps page values in its own table.
 	 *
-	 * @param WP_Post $post Page.
+	 * @param WP_Post $post      Page.
+	 * @param bool    $with_text Replace variables in title and description.
 	 * @return array
 	 */
-	private static function aioseo( WP_Post $post ) {
+	private static function aioseo( WP_Post $post, $with_text ) {
 		$row  = \AIOSEO\Plugin\Common\Models\Post::getPost( $post->ID );
-		$vars = static function ( $text ) use ( $post ) {
+		$vars = static function ( $text ) use ( $post, $with_text ) {
+			if ( ! $with_text ) {
+				return '';
+			}
 			$text = self::string( $text );
 			return '' !== $text ? aioseo()->tags->replaceTags( $text, $post->ID ) : $text;
 		};
@@ -352,12 +374,13 @@ final class Wp_Mylinks_Seo {
 	/**
 	 * SEOPress.
 	 *
-	 * @param WP_Post $post Page.
+	 * @param WP_Post $post      Page.
+	 * @param bool    $with_text Replace variables in title and description.
 	 * @return array
 	 */
-	private static function seopress( WP_Post $post ) {
-		$vars = static function ( $text ) use ( $post ) {
-			if ( '' === $text ) {
+	private static function seopress( WP_Post $post, $with_text ) {
+		$vars = static function ( $text ) use ( $post, $with_text ) {
+			if ( ! $with_text || '' === $text ) {
 				return $text;
 			}
 			$context = seopress_get_service( 'ContextPage' )->buildContextWithCurrentId( $post->ID )->getContext();

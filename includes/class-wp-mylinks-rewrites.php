@@ -156,8 +156,7 @@ if ( ! class_exists('Wp_Mylinks_Rewrites') ) :
 				return $query_vars;
 			}
 
-			// post_name stores non-Latin slugs percent-encoded, the request has them decoded.
-			$slug = sanitize_title_for_query($slug);
+			$slug = $this->stored_slug($slug);
 
 			// If a published page or post owns this slug, defer to it.
 			if ( $this->slug_belongs_to_other_post_type($slug) ) {
@@ -178,6 +177,17 @@ if ( ! class_exists('Wp_Mylinks_Rewrites') ) :
 			$query_vars['post_type'] = self::POST_TYPE;
 
 			return $query_vars;
+		}
+
+		/**
+		 * post_name stores non-Latin slugs percent-encoded, requests may carry them
+		 * decoded. Plain ASCII is left exact so /my.page/ never aliases /my-page/.
+		 *
+		 * @param string $slug Slug from the request.
+		 * @return string
+		 */
+		private function stored_slug( $slug ) {
+			return preg_match('/[\x80-\xff%]/', $slug) ? sanitize_title_for_query($slug) : $slug;
 		}
 
 		/**
@@ -306,7 +316,7 @@ if ( ! class_exists('Wp_Mylinks_Rewrites') ) :
 			}
 
 			// Private pages keep their /<cpt-slug>/ URL, because the bare URL only serves published ones.
-			if ( ! $this->mylink_exists_for_slug(sanitize_title_for_query($remainder)) ) {
+			if ( ! $this->mylink_exists_for_slug($this->stored_slug($remainder)) ) {
 				return;
 			}
 

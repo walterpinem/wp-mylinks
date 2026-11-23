@@ -43,10 +43,11 @@ global $post;
 $post_id = (int) get_the_ID();
 
 // The theme is bypassed here, so its password gate has to be applied here too.
+// Locked or unlocked, a protected page must never land in a shared page cache.
+if ( ! empty( $post->post_password ) && ! defined( 'DONOTCACHEPAGE' ) ) {
+	define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- The convention page-cache plugins read.
+}
 if ( post_password_required( $post ) ) {
-	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
-		define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- The convention page-cache plugins read.
-	}
 	wp_die( get_the_password_form( $post ), esc_html( wp_strip_all_tags( get_the_title( $post ) ) ), array( 'response' => 200 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Core's own form markup.
 }
 
@@ -335,12 +336,12 @@ if ( 'yes' === get_option( 'wp_mylinks_enable_schema' ) ) {
 
 // 2) Open Graph + Twitter Card meta tags.
 // Hand-written share tags in the Header Script win, so they are never doubled.
-if ( 'yes' === get_option( 'wp_mylinks_enable_og' ) && false === stripos( (string) $header_script, 'og:title' ) ) {
+if ( 'yes' === get_option( 'wp_mylinks_enable_og' ) && ! preg_match( '/<meta\b[^>]*\b(?:property|name)\s*=\s*["\']?og:title\b/i', (string) $header_script ) ) {
 	$og_lines = array();
 
 	$og_title  = '' !== $meta_title ? $meta_title : (string) get_the_title();
 	$og_desc   = $meta_description;
-	$og_url    = $post_id > 0 ? (string) get_permalink( $post_id ) : '';
+	$og_url    = $post_id > 0 ? Wp_Mylinks_Seo::canonical( $post_id ) : '';
 	$og_image  = function_exists( 'wp_mylinks_resolve_og_image' )
 		? wp_mylinks_resolve_og_image( $post_id )
 		: '';
@@ -571,10 +572,7 @@ while ( have_posts() ) :
 			if ( is_string( $embed_html ) && '' !== $embed_html ) {
 				$inner = $embed_html;
 			} else {
-				// Visitors get a working link, and a page cache does not keep the failure.
-				if ( ! defined( 'DONOTCACHEPAGE' ) ) {
-					define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- The convention page-cache plugins read.
-				}
+				// Visitors get a working link instead of an error.
 				$inner = sprintf( '<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>', esc_url( $embed ), esc_html( $embed ) );
 			}
 

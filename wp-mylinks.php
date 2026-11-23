@@ -314,28 +314,48 @@ function wp_mylinks_valid_link_urls( $post_id ) {
 			}
 		}
 		if ( '' !== $url ) {
-			// Accept every serialization the click beacon might report for this
-			// href: the raw stored value, its esc_url_raw() encoding (what the
-			// href actually renders as), and the browser's bare-authority "/"
-			// normalization of that. Without the last, a path-less URL such as
-			// "https://example.com" never matches the browser's "…/.com/".
-			// Browsers also percent-encode non-ASCII characters in anchor.href.
-			$encoded = preg_replace_callback(
-				'/[\x80-\xff]+/',
-				static function ( $match ) {
-					return rawurlencode( $match[0] );
-				},
-				esc_url_raw( $url )
-			);
-			foreach ( array( $url, esc_url_raw( $url ), wp_mylinks_browser_normalize_url( esc_url_raw( $url ) ), $encoded, wp_mylinks_browser_normalize_url( (string) $encoded ) ) as $variant ) {
-				if ( '' !== (string) $variant ) {
-					$urls[ md5( $variant ) ] = $url;
-				}
+			foreach ( wp_mylinks_link_url_variants( $url ) as $variant ) {
+				$urls[ md5( $variant ) ] = $url;
 			}
 		}
 	}
 
 	return $urls;
+}
+
+/**
+ * Every form the click beacon might report for a link: the stored value, its
+ * esc_url_raw() form (what the href renders as), the browser's "/" after a bare
+ * domain, percent-encoded non-ASCII characters, and punycode domains.
+ *
+ * @since 1.2.0
+ *
+ * @param string $url Stored URL.
+ * @return string[]
+ */
+function wp_mylinks_link_url_variants( $url ) {
+	$url     = (string) $url;
+	$clean   = esc_url_raw( $url );
+	$encoded = (string) preg_replace_callback(
+		'/[\x80-\xff]+/',
+		static function ( $match ) {
+			return rawurlencode( $match[0] );
+		},
+		$clean
+	);
+	$forms   = array( $url, $clean, wp_mylinks_browser_normalize_url( $clean ), $encoded, wp_mylinks_browser_normalize_url( $encoded ) );
+
+	$host = wp_parse_url( $clean, PHP_URL_HOST );
+	if ( is_string( $host ) && preg_match( '/[\x80-\xff]/', $host ) && function_exists( 'idn_to_ascii' ) && defined( 'INTL_IDNA_VARIANT_UTS46' ) ) {
+		$ascii = idn_to_ascii( $host, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46 );
+		if ( is_string( $ascii ) && '' !== $ascii ) {
+			$punycode = (string) preg_replace( '/' . preg_quote( rawurlencode( $host ), '/' ) . '/', $ascii, $encoded, 1 );
+			$forms[]  = $punycode;
+			$forms[]  = wp_mylinks_browser_normalize_url( $punycode );
+		}
+	}
+
+	return array_values( array_unique( array_filter( $forms, 'strlen' ) ) );
 }
 
 /**
@@ -395,7 +415,7 @@ function wp_mylinks_handle_link_click() {
 	}
 
 	$post = get_post( $post_id );
-	if ( ! $post instanceof WP_Post || 'mylink' !== $post->post_type || 'publish' !== $post->post_status ) {
+	if ( ! $post instanceof WP_Post || 'mylink' !== $post->post_type || 'publish' !== $post->post_status || post_password_required( $post ) ) {
 		wp_send_json_error( null, 404 );
 	}
 

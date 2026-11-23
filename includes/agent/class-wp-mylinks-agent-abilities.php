@@ -695,10 +695,8 @@ final class Wp_Mylinks_Agent_Abilities {
 			}
 
 			$hashes = array();
-			foreach ( array( $url, esc_url_raw( $url ), wp_mylinks_browser_normalize_url( esc_url_raw( $url ) ) ) as $variant ) {
-				if ( '' !== (string) $variant ) {
-					$hashes[ md5( $variant ) ] = true;
-				}
+			foreach ( wp_mylinks_link_url_variants( $url ) as $variant ) {
+				$hashes[ md5( $variant ) ] = true;
 			}
 
 			$links[] = array(

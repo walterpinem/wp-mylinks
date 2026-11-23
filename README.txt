@@ -225,10 +225,11 @@ AI agents, plus security and compatibility fixes.
 * [New] **AI agents settings tab**. Under MyLinks, Settings, AI agents, choose the access (Off, Read only, Read and edit), choose whether agent changes to published pages Wait for my approval or Publish directly with undo, and follow a connect checklist.
 * [New] **Review and undo**. Agent changes are logged, with Undo on each page. Proposals have a preview, Approve and Discard.
 * [Security] MyLinks page fields, including custom page scripts, are now protected, so they can no longer be read or changed as generic custom fields over XML-RPC.
-* [Security] **Password-protected pages** now ask for the password before showing their content, and stay out of sitemaps.
+* [Security] **Password-protected pages** now ask for the password before showing their content, stay out of sitemaps and page caches, and do not count clicks until unlocked.
+* [Security] **WordPress Importer**. Accounts without the unfiltered HTML permission can no longer bring raw code into MyLinks fields through an import.
 * [Improved] Media embeds: a failed embed is remembered for 15 minutes and one page view looks up at most 10 new embeds, so dead embed links cannot hold up the page.
 * [Fixed] **SEO plugins**. With Yoast SEO active, the Setup Meta Tags box and global meta settings were ignored, variables could print as plain text, and Open Graph and schema tags were missing. Each page now uses its own box first, then its values from Yoast SEO, Rank Math, All in One SEO, SEOPress or The SEO Framework, then the global settings.
-* [Fixed] **Canonical tags and sitemaps**. Every page now has a canonical tag, and noindex pages are left out of the WordPress, Yoast SEO, Rank Math, All in One SEO, SEOPress and The SEO Framework sitemaps.
+* [Fixed] **Canonical tags and sitemaps**. Every page now has a canonical tag, a MyLink set as the homepage points to the home URL, and noindex pages are left out of the WordPress, Yoast SEO, Rank Math, All in One SEO, SEOPress and The SEO Framework sitemaps.
 * [Fixed] **Custom scripts**. Header, After Body, Footer and analytics code now print exactly as entered, so meta tags, links, styles and inline JavaScript work. Hand-written Open Graph tags are never doubled.
 * [Fixed] **Japanese and other non-Latin text**. Pages with non-Latin URLs no longer return a 404, clicks on non-Latin links are counted, and non-Latin font names are kept.
 * [Fixed] **Page URLs**. Private pages open for logged-in users who can read them, and a MyLink no longer takes over another post type's URL with the same slug.
