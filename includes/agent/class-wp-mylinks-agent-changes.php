@@ -79,9 +79,15 @@ final class Wp_Mylinks_Agent_Changes {
 			);
 		}
 
+		// An approval is a person's review. It only reads as reviewed when no
+		// unreviewed agent write sits in the same record.
+		$pending['approved'] = 'approved' === $event && 0 === (int) $pending['writes'];
+		if ( 'approved' !== $event || $pending['approved'] ) {
+			$pending['writers'] = array_values( array_unique( array_merge( $pending['writers'], array( get_current_user_id() ) ) ) );
+		}
+
 		++$pending['writes'];
 		$pending['last']          = time();
-		$pending['writers']       = array_values( array_unique( array_merge( $pending['writers'], array( get_current_user_id() ) ) ) );
 		$pending['changed']       = array_values( array_unique( array_merge( $pending['changed'], $changed ) ) );
 		$pending['after_version'] = Wp_Mylinks_Agent_State::version( Wp_Mylinks_Agent_State::read( get_post( $post->ID ) ) );
 
@@ -284,20 +290,28 @@ final class Wp_Mylinks_Agent_Changes {
 
 		$created  = ! empty( $pending['created'] );
 		$can_undo = ! $created || current_user_can( 'delete_post', $post_id );
-		$message  = sprintf(
-			/* translators: 1: user name(s), 2: number of changes, 3: list of changed fields */
-			_n(
-				'An AI agent working as %1$s changed this page %2$d time since your last review: %3$s.',
-				'An AI agent working as %1$s changed this page %2$d times since your last review: %3$s.',
+		$approved = ! empty( $pending['approved'] );
+		$message  = $approved
+			? sprintf(
+				/* translators: 1: user name, 2: list of changed fields */
+				__( 'Agent changes approved by %1$s: %2$s. You can still undo them.', 'wp-mylinks' ),
+				self::names( $pending['writers'] ),
+				self::labels( $pending['changed'] )
+			)
+			: sprintf(
+				/* translators: 1: user name(s), 2: number of changes, 3: list of changed fields */
+				_n(
+					'An AI agent working as %1$s changed this page %2$d time since your last review: %3$s.',
+					'An AI agent working as %1$s changed this page %2$d times since your last review: %3$s.',
+					(int) $pending['writes'],
+					'wp-mylinks'
+				),
+				self::names( $pending['writers'] ),
 				(int) $pending['writes'],
-				'wp-mylinks'
-			),
-			self::names( $pending['writers'] ),
-			(int) $pending['writes'],
-			self::labels( $pending['changed'] )
-		);
+				self::labels( $pending['changed'] )
+			);
 		?>
-		<div class="notice notice-warning">
+		<div class="notice <?php echo $approved ? 'notice-info' : 'notice-warning'; ?>">
 			<p><?php echo esc_html( $message ); ?></p>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACTION ); ?>">
@@ -323,7 +337,8 @@ final class Wp_Mylinks_Agent_Changes {
 	 * @return array
 	 */
 	public static function post_state( $states, $post ) {
-		if ( $post instanceof WP_Post && 'mylink' === $post->post_type && self::pending( $post->ID ) ) {
+		$pending = $post instanceof WP_Post && 'mylink' === $post->post_type ? self::pending( $post->ID ) : null;
+		if ( $pending && empty( $pending['approved'] ) ) {
 			$states['wp_mylinks_agent_review'] = __( 'Agent changes to review', 'wp-mylinks' );
 		}
 		return $states;
