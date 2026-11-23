@@ -145,11 +145,19 @@ if ( ! class_exists('Wp_Mylinks_Rewrites') ) :
 				return $query_vars;
 			}
 
+			// Another post type's URL (a product, a doc) is never a MyLink.
+			if ( ! empty($query_vars['post_type']) && self::POST_TYPE !== $query_vars['post_type'] ) {
+				return $query_vars;
+			}
+
 			// Only act on bare slug requests.
 			$slug = $this->extract_slug_from_query_vars($query_vars);
 			if ( null === $slug ) {
 				return $query_vars;
 			}
+
+			// post_name stores non-Latin slugs percent-encoded, the request has them decoded.
+			$slug = sanitize_title_for_query($slug);
 
 			// If a published page or post owns this slug, defer to it.
 			if ( $this->slug_belongs_to_other_post_type($slug) ) {
@@ -294,6 +302,11 @@ if ( ! class_exists('Wp_Mylinks_Rewrites') ) :
 
 			// Only redirect single-slug requests; leave deeper paths alone.
 			if ( false !== strpos($remainder, '/') ) {
+				return;
+			}
+
+			// Private pages keep their /<cpt-slug>/ URL, because the bare URL only serves published ones.
+			if ( ! $this->mylink_exists_for_slug(sanitize_title_for_query($remainder)) ) {
 				return;
 			}
 

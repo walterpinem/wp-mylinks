@@ -166,8 +166,8 @@ The Page or Post wins. Starting in 1.0.8, the plugin only routes a slug-only URL
 Yes. Use the `wp_mylinks_cpt_rewrite_slug` filter to override the slug. Public URLs are still served at /<post-name>/ regardless. Example:
 `add_filter( 'wp_mylinks_cpt_rewrite_slug', function() { return 'bio'; } );`
 
-= Does WP MyLinks work with Yoast SEO? =
-Yes. Each MyLinks page uses its own Setup Meta Tags values first. If a field there is empty, it uses that page's Yoast SEO value, with Yoast variables filled in, and then your global settings. Yoast does not print tags on MyLinks pages, so turn on the Open Graph and Schema options in the MyLinks settings if you want them. You will not get duplicate tags.
+= Does WP MyLinks work with Yoast SEO and other SEO plugins? =
+Yes. Each MyLinks page uses its own Setup Meta Tags values first. If a field there is empty, it uses that page's value from Yoast SEO, Rank Math, All in One SEO, SEOPress or The SEO Framework, with variables filled in, and then your global settings. SEO plugins do not print tags on MyLinks pages, so turn on the Open Graph and Schema options in the MyLinks settings if you want them. You will not get duplicate tags, and noindex pages are left out of their sitemaps.
 
 = Will the new Schema.org and Open Graph features change anything if I don't enable them? =
 No. Both features are off by default. Existing 1.0.7 installs upgrade silently and continue rendering exactly as before. Enable them on Settings → MyLinks → Global only when you're ready.
@@ -219,14 +219,22 @@ The complete, formatted version history is also published at [onlinestorekit.com
 
 = 1.2.0 - November 23, 2026 =
 
-AI agents release.
+AI agents, plus security and compatibility fixes.
 
 * [New] **AI agents (MCP)**. AI agents can now list, read, create and edit MyLinks pages over MCP. It needs WordPress 6.9 or newer and the free MCP Adapter plugin, and it is off by default. The plugin itself still runs on WordPress 6.0.
 * [New] **AI agents settings tab**. Under MyLinks, Settings, AI agents, choose the access (Off, Read only, Read and edit), choose whether agent changes to published pages Wait for my approval or Publish directly with undo, and follow a connect checklist.
 * [New] **Review and undo**. Agent changes are logged, with Undo on each page. Proposals have a preview, Approve and Discard.
 * [Security] MyLinks page fields, including custom page scripts, are now protected, so they can no longer be read or changed as generic custom fields over XML-RPC.
+* [Security] **Password-protected pages** now ask for the password before showing their content, and stay out of sitemaps.
 * [Improved] Media embeds: a failed embed is remembered for 15 minutes and one page view looks up at most 10 new embeds, so dead embed links cannot hold up the page.
-* [Fixed] **Yoast SEO meta tags**. With Yoast active, the Setup Meta Tags box and global meta settings were ignored, Yoast variables could print as plain text, and Open Graph and schema tags were missing. Each page now uses its own box first, then its Yoast values, then the global settings.
+* [Fixed] **SEO plugins**. With Yoast SEO active, the Setup Meta Tags box and global meta settings were ignored, variables could print as plain text, and Open Graph and schema tags were missing. Each page now uses its own box first, then its values from Yoast SEO, Rank Math, All in One SEO, SEOPress or The SEO Framework, then the global settings.
+* [Fixed] **Canonical tags and sitemaps**. Every page now has a canonical tag, and noindex pages are left out of the WordPress, Yoast SEO, Rank Math, All in One SEO, SEOPress and The SEO Framework sitemaps.
+* [Fixed] **Custom scripts**. Header, After Body, Footer and analytics code now print exactly as entered, so meta tags, links, styles and inline JavaScript work. Hand-written Open Graph tags are never doubled.
+* [Fixed] **Japanese and other non-Latin text**. Pages with non-Latin URLs no longer return a 404, clicks on non-Latin links are counted, and non-Latin font names are kept.
+* [Fixed] **Page URLs**. Private pages open for logged-in users who can read them, and a MyLink no longer takes over another post type's URL with the same slug.
+* [Fixed] **Share images**. Open Graph tags no longer declare a fixed image size that could be wrong.
+* [Improved] **Failed embeds** now show a working link instead of an error message.
+* [Improved] **Code fields** wrap long lines, so they no longer scroll sideways.
 * [Fixed] Live Builder preview reloads no longer count as page visits.
 * [Misc] Plugin Check cleanup. The `wpmylinks_url_params` filter is now `wp_mylinks_url_params`, and the old name still works but is deprecated. The helper `wpmylinks_url()` is now `wp_mylinks_url()`.
 
@@ -435,7 +443,7 @@ Maintenance release: WordPress 7.1 compatibility and housekeeping.
 
 == Upgrade Notice ==
 = 1.2.0 - November 23, 2026 =
-Security update, recommended for all users: protects page fields from XML-RPC changes. New: AI agents can list, read, create and edit your pages over MCP. Off by default, needs WordPress 6.9 and the MCP Adapter plugin. Also fixes meta tags when Yoast SEO is active.
+Security and compatibility update, recommended for all users: protects password pages and page fields, and fixes SEO plugin tags, custom scripts and non-Latin URLs. New: AI agents can manage your pages over MCP, off by default, needing WordPress 6.9 and the MCP Adapter.
 
 = 1.1.2 - November 22, 2026 =
 Editor polish: X (Twitter) labels, YouTube spelling, consistent Meta Description fields, the gold focus ring, and the new overview video on the Welcome tab. No data changes. Safe update for all users.

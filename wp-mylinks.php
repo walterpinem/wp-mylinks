@@ -84,6 +84,22 @@ register_deactivation_hook(__FILE__, 'wp_mylinks_deactivate');
 require WP_MYLINKS_PATH . 'includes/class-wp-mylinks.php';
 require WP_MYLINKS_PATH . 'includes/fields/load.php';
 require WP_MYLINKS_PATH . 'includes/agent/load.php';
+require WP_MYLINKS_PATH . 'includes/class-wp-mylinks-seo.php';
+Wp_Mylinks_Seo::register();
+
+if ( ! function_exists( 'wpmylinks_url' ) ) {
+	/**
+	 * Old name of wp_mylinks_url(), kept so custom code calling it cannot fatal.
+	 *
+	 * @deprecated 1.2.0 Use wp_mylinks_url().
+	 *
+	 * @param string $base_url URL.
+	 * @return string
+	 */
+	function wpmylinks_url( $base_url ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- Backward compatibility.
+		return wp_mylinks_url( $base_url );
+	}
+}
 require WP_MYLINKS_PATH . 'admin/partials/wp-mylinks-admin-settings.php';
 require WP_MYLINKS_PATH . 'admin/partials/wp-mylinks-admin-agents.php';
 require WP_MYLINKS_PATH . 'includes/class-wp-mylinks-more-plugins.php';
@@ -303,7 +319,15 @@ function wp_mylinks_valid_link_urls( $post_id ) {
 			// href actually renders as), and the browser's bare-authority "/"
 			// normalization of that. Without the last, a path-less URL such as
 			// "https://example.com" never matches the browser's "…/.com/".
-			foreach ( array( $url, esc_url_raw( $url ), wp_mylinks_browser_normalize_url( esc_url_raw( $url ) ) ) as $variant ) {
+			// Browsers also percent-encode non-ASCII characters in anchor.href.
+			$encoded = preg_replace_callback(
+				'/[\x80-\xff]+/',
+				static function ( $match ) {
+					return rawurlencode( $match[0] );
+				},
+				esc_url_raw( $url )
+			);
+			foreach ( array( $url, esc_url_raw( $url ), wp_mylinks_browser_normalize_url( esc_url_raw( $url ) ), $encoded, wp_mylinks_browser_normalize_url( (string) $encoded ) ) as $variant ) {
 				if ( '' !== (string) $variant ) {
 					$urls[ md5( $variant ) ] = $url;
 				}
@@ -584,7 +608,7 @@ function wp_mylinks_sanitize_font_family( $value ) {
 	if ( ! is_string($value) ) {
 		return '';
 	}
-	$clean = preg_replace('/[^A-Za-z0-9 ,\'"\-]/', '', $value);
+	$clean = preg_replace('/[^\p{L}\p{N} ,\'"\-]/u', '', $value); // Letters of any script, for Japanese font names.
 	$clean = trim( (string) $clean );
 	return function_exists('mb_substr') ? mb_substr($clean, 0, 200) : substr($clean, 0, 200);
 }
@@ -1329,16 +1353,16 @@ if ( ! function_exists('wp_mylinks_resolve_og_image') ) {
 			}
 		}
 
+		if ( $post_id > 0 ) {
+			$seo_plugin_image = Wp_Mylinks_Seo::image( $post_id );
+			if ( '' !== $seo_plugin_image ) {
+				return $seo_plugin_image;
+			}
+		}
+
 		$global_og = (string) get_option('wp_mylinks_og_image', '');
 		if ( '' !== $global_og ) {
 			return $global_og;
-		}
-
-		if ( $post_id > 0 && function_exists('wp_mylinks_isYoastActive') && wp_mylinks_isYoastActive() ) {
-			$yoast_og = (string) get_post_meta($post_id, '_yoast_wpseo_opengraph-image', true);
-			if ( '' !== $yoast_og ) {
-				return $yoast_og;
-			}
 		}
 
 		if ( $post_id > 0 ) {

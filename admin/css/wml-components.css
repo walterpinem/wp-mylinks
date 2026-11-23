@@ -568,7 +568,9 @@ a.wml-button-secondary:visited {
   padding: 12px 14px;
   resize: vertical;
   tab-size: 2;
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: hidden;
 }
 
 .wml-field__input.wml-code:focus {
@@ -614,7 +616,7 @@ a.wml-button-secondary:visited {
 }
 
 /* Editor code fields (per-page scripts, custom styles, Links HTML block) read
-   like the Scripts editor: monospace, no wrap, taller. */
+   like the Scripts editor: monospace, wrapped, taller. */
 [data-wml-field="html-block"] textarea.wml-field__input,
 [data-wml-field="mylinks_mylinks-single-custom-header-script"] textarea.wml-field__input,
 [data-wml-field="mylinks_mylinks-single-custom-footer-script"] textarea.wml-field__input,
@@ -624,7 +626,9 @@ a.wml-button-secondary:visited {
   line-height: 1.6;
   min-height: 180px;
   tab-size: 2;
-  white-space: pre;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow-x: hidden;
 }
 
 /* Header / After Body / Footer side by side inside the wide card. */

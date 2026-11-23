@@ -42,64 +42,13 @@ function wp_mylinks_render_template() {
 global $post;
 $post_id = (int) get_the_ID();
 
-/**
- * KSES allowlist for user-supplied script blobs (analytics, header, footer).
- * These come from the plugin's settings page, which only manage_options
- * users can save, but we still constrain the tag/attribute set as defense
- * in depth.
- */
-$wp_mylinks_allowed_script_tags = array(
-	'script'   => array(
-		'type'        => array(),
-		'src'         => array(),
-		'async'       => array(),
-		'defer'       => array(),
-		'crossorigin' => array(),
-		'integrity'   => array(),
-		'nonce'       => array(),
-		'id'          => array(),
-		'data-*'      => true,
-	),
-	'noscript' => array(),
-	'div'      => array(
-		'id'    => array(),
-		'class' => array(),
-		'style' => array(),
-	),
-	'span'     => array(
-		'id'    => array(),
-		'class' => array(),
-		'style' => array(),
-	),
-	'iframe'   => array(
-		'src'             => array(),
-		'width'           => array(),
-		'height'          => array(),
-		'frameborder'     => array(),
-		'allow'           => array(),
-		'allowfullscreen' => array(),
-		'loading'         => array(),
-		'title'           => array(),
-		'referrerpolicy'  => array(),
-		'sandbox'         => array(),
-	),
-	'a'        => array(
-		'href'   => array(),
-		'target' => array(),
-		'rel'    => array(),
-	),
-	'img'      => array(
-		'src'     => array(),
-		'alt'     => array(),
-		'width'   => array(),
-		'height'  => array(),
-		'loading' => array(),
-	),
-	'p'        => array(),
-	'br'       => array(),
-	'strong'   => array(),
-	'em'       => array(),
-);
+// The theme is bypassed here, so its password gate has to be applied here too.
+if ( post_password_required( $post ) ) {
+	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+		define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- The convention page-cache plugins read.
+	}
+	wp_die( get_the_password_form( $post ), esc_html( wp_strip_all_tags( get_the_title( $post ) ) ), array( 'response' => 200 ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Core's own form markup.
+}
 
 /**
  * Resolve a value with the standard fallback chain:
@@ -264,33 +213,16 @@ $wp_mylinks_build_socials = static function ( $indent = '    ', $post_id = 0 ) {
 // SEO meta resolution
 // -----------------------------------------------------------------------------
 
-$yoast_seo_active = function_exists( 'wp_mylinks_isYoastActive' ) && wp_mylinks_isYoastActive();
-
-/**
- * One SEO value: this page's Setup Meta Tags box, then this page's Yoast value
- * with its variables replaced, then the global setting.
- */
-$wp_mylinks_seo_value = static function ( $field, $yoast_key, $option_key ) use ( $post_id, $yoast_seo_active ) {
-	$value = $post_id ? trim( (string) get_post_meta( $post_id, mylinks_prefix( $field ), true ) ) : '';
-	if ( '' === $value && $post_id && $yoast_seo_active ) {
-		$value = trim( (string) get_post_meta( $post_id, $yoast_key, true ) );
-		if ( '' !== $value && function_exists( 'wpseo_replace_vars' ) ) {
-			$value = trim( (string) wpseo_replace_vars( $value, get_post( $post_id ) ) );
-		}
-	}
-	return '' !== $value ? $value : trim( (string) get_option( $option_key, '' ) );
-};
-
-$meta_title       = $wp_mylinks_seo_value( 'meta-title', '_yoast_wpseo_title', 'mylinks_meta_title' );
-$meta_description = $wp_mylinks_seo_value( 'meta-description', '_yoast_wpseo_metadesc', 'mylinks_meta_description' );
+$meta_title       = Wp_Mylinks_Seo::title( $post_id );
+$meta_description = Wp_Mylinks_Seo::description( $post_id );
 if ( '' === $meta_title ) {
-	$meta_title = (string) get_the_title();
+	// Not get_the_title(): it adds "Protected:" or "Private:" to the browser title.
+	$meta_title = wp_strip_all_tags( (string) apply_filters( 'the_title', (string) get_post_field( 'post_title', $post_id ), $post_id ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core filter.
 }
 
-$set_noindex  = $wp_mylinks_resolve( mylinks_prefix( 'noindex' ), 'wp_mylinks_noindex', '' );
-$set_nofollow = $wp_mylinks_resolve( mylinks_prefix( 'nofollow' ), 'wp_mylinks_nofollow', '' );
-$noindex      = ( 'yes' === $set_noindex ) ? 'noindex' : 'index';
-$nofollow     = ( 'yes' === $set_nofollow ) ? 'nofollow' : 'follow';
+$wp_mylinks_robots = Wp_Mylinks_Seo::robots( $post_id );
+$noindex           = $wp_mylinks_robots['noindex'] ? 'noindex' : 'index';
+$nofollow          = $wp_mylinks_robots['nofollow'] ? 'nofollow' : 'follow';
 
 // -----------------------------------------------------------------------------
 // Favicon, custom CSS, scripts, theme
@@ -402,7 +334,8 @@ if ( 'yes' === get_option( 'wp_mylinks_enable_schema' ) ) {
 }
 
 // 2) Open Graph + Twitter Card meta tags.
-if ( 'yes' === get_option( 'wp_mylinks_enable_og' ) ) {
+// Hand-written share tags in the Header Script win, so they are never doubled.
+if ( 'yes' === get_option( 'wp_mylinks_enable_og' ) && false === stripos( (string) $header_script, 'og:title' ) ) {
 	$og_lines = array();
 
 	$og_title  = '' !== $meta_title ? $meta_title : (string) get_the_title();
@@ -433,8 +366,6 @@ if ( 'yes' === get_option( 'wp_mylinks_enable_og' ) ) {
 	}
 	if ( '' !== $og_image ) {
 		$og_lines[] = sprintf( '  <meta property="og:image" content="%s">', esc_url( $og_image ) );
-		$og_lines[] = '  <meta property="og:image:width" content="1200">';
-		$og_lines[] = '  <meta property="og:image:height" content="630">';
 	}
 
 	// Twitter Card.
@@ -482,6 +413,9 @@ if ( 'yes' === get_option( 'wp_mylinks_enable_og' ) ) {
 	<title><?php echo esc_html( $meta_title ); ?></title>
 	<meta name="description" content="<?php echo esc_attr( $meta_description ); ?>">
 	<meta name="robots" content="<?php echo esc_attr( $noindex . ', ' . $nofollow ); ?>, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<?php if ( $post_id ) : ?>
+	<link rel="canonical" href="<?php echo esc_url( Wp_Mylinks_Seo::canonical( $post_id ) ); ?>">
+<?php endif; ?>
 
 <?php if ( '' !== $plugin_styles_html ) : ?>
 	<?php echo $plugin_styles_html . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WP-generated stylesheet tags. ?>
@@ -497,10 +431,10 @@ if ( '' !== $schema_script_tag ) {
 	echo "\n" . $schema_script_tag . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON pre-built via wp_json_encode.
 }
 if ( '' !== $analytics_script ) {
-	echo wp_kses( $analytics_script, $wp_mylinks_allowed_script_tags ) . "\n";
+	echo $analytics_script . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Custom code field: limited to unfiltered_html at save and, per page, at render. kses would strip meta tags and corrupt inline JavaScript.
 }
 if ( '' !== $header_script ) {
-	echo wp_kses( $header_script, $wp_mylinks_allowed_script_tags ) . "\n";
+	echo $header_script . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Custom code field: limited to unfiltered_html at save and, per page, at render. kses would strip meta tags and corrupt inline JavaScript.
 }
 
 /**
@@ -519,7 +453,7 @@ do_action( 'wp_mylinks_head', $post_id );
 	<a class="screen-reader-text" href="#wp-mylinks-content"><?php esc_html_e( 'Skip to content', 'wp-mylinks' ); ?></a>
 <?php
 if ( '' !== $body_script ) {
-	echo wp_kses( $body_script, $wp_mylinks_allowed_script_tags ) . "\n";
+	echo $body_script . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Custom code field: limited to unfiltered_html at save and, per page, at render. kses would strip meta tags and corrupt inline JavaScript.
 }
 
 /**
@@ -636,14 +570,12 @@ while ( have_posts() ) :
 
 			if ( is_string( $embed_html ) && '' !== $embed_html ) {
 				$inner = $embed_html;
-			} elseif ( is_wp_error( $embed_html ) ) {
-				$inner = sprintf(
-					/* translators: %s: the reason the embed failed. */
-					esc_html__( 'Unable to embed the content. Reason: %s', 'wp-mylinks' ),
-					esc_html( $embed_html->get_error_message() )
-				);
 			} else {
-				$inner = esc_html__( 'Unable to embed the content.', 'wp-mylinks' );
+				// Visitors get a working link, and a page cache does not keep the failure.
+				if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+					define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- The convention page-cache plugins read.
+				}
+				$inner = sprintf( '<a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a>', esc_url( $embed ), esc_html( $embed ) );
 			}
 
 			$item_html = '      <div class="link media-embed-wrapper">' . "\n"
@@ -819,7 +751,7 @@ if ( '' !== $bottom_socials ) {
 <?php endif; ?>
 <?php
 if ( '' !== $footer_script ) {
-	echo wp_kses( $footer_script, $wp_mylinks_allowed_script_tags ) . "\n";
+	echo $footer_script . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Custom code field: limited to unfiltered_html at save and, per page, at render. kses would strip meta tags and corrupt inline JavaScript.
 }
 
 /**
